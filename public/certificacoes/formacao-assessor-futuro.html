@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Imersão de Alta Performance — Wireframe LP</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+  :root{
+    --bg: #0A0A0F;
+    --bg-2: #101018;
+    --surface: #14141C;
+    --surface-2: #1B1B26;
+    --line: rgba(255,255,255,0.09);
+    --line-strong: rgba(255,255,255,0.18);
+    --text: #F4F4F0;
+    --muted: rgba(244,244,240,0.62);
+    --dim: rgba(244,244,240,0.42);
+    --accent: #F5C518;          /* warm institutional yellow */
+    --accent-soft: rgba(245,197,24,0.14);
+    --accent-line: rgba(245,197,24,0.35);
+  }
+  html,body{background:var(--bg);color:var(--text);font-family:'Geist',ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased;}
+  .font-serif{font-family:'Instrument Serif',ui-serif,Georgia,serif;font-weight:400;letter-spacing:-0.01em;}
+  .font-mono{font-family:'Geist Mono',ui-monospace,monospace;}
+  .text-accent{color:var(--accent);}
+  .bg-accent{background:var(--accent);}
+  .bg-surface{background:var(--surface);}
+  .bg-surface-2{background:var(--surface-2);}
+  .border-line{border-color:var(--line);}
+  .border-line-strong{border-color:var(--line-strong);}
+  .text-muted{color:var(--muted);}
+  .text-dim{color:var(--dim);}
+  .grid-bg{
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+  .hatch{
+    background-image: repeating-linear-gradient(135deg, rgba(255,255,255,0.05) 0 1px, transparent 1px 8px);
+  }
+  .hatch-accent{
+    background-image: repeating-linear-gradient(135deg, rgba(245,197,24,0.22) 0 1px, transparent 1px 7px);
+  }
+  .caret::after{content:""; display:inline-block; width:8px; height:8px; background:var(--accent); margin-left:8px; transform:translateY(-2px);}
+  .kbd{font-family:'Geist Mono',monospace; font-size:11px; padding:2px 6px; border:1px solid var(--line-strong); border-radius:3px; color:var(--muted);}
+  .ticker{ letter-spacing:0.18em; text-transform:uppercase; }
+  /* dotted/dashed leader between number and label */
+  .leader{ flex:1; border-bottom:1px dotted rgba(255,255,255,0.18); margin:0 10px 6px; }
+  /* tiny ribbed divider used in section headers */
+  .ribbed{
+    background-image: repeating-linear-gradient(to right, var(--line) 0 1px, transparent 1px 6px);
+    height:1px;
+  }
+  details > summary { list-style:none; cursor:pointer;}
+  details > summary::-webkit-details-marker { display:none; }
+  .scrollbar-thin::-webkit-scrollbar{ height:6px;}
+  .scrollbar-thin::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:3px;}
+  input, select, textarea{ font-family:inherit;}
+  /* checkbox-like radio */
+  .radio-card:has(input:checked){ border-color: var(--accent); background: var(--accent-soft); }
+  /* underline highlight for headline accent words */
+  .ink{ background-image: linear-gradient(transparent 70%, rgba(245,197,24,0.35) 70%); padding: 0 .08em; }
+</style>
+
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" data-presets="env,react">
+
+
+
+
+
+
+
+
+
+
+
+
+
+const { useState, useEffect, useRef, useMemo } = React;
+
+/* ==================== ATOMS ==================== */
+const Icon = ({ name, className = "w-4 h-4", strokeWidth = 1.5 }) => {
+  const ref = useRef(null);
+  useEffect(() => {
+    if (ref.current && window.lucide) {
+      ref.current.innerHTML = "";
+      const el = document.createElement('i');
+      el.setAttribute('data-lucide', name);
+      ref.current.appendChild(el);
+      window.lucide.createIcons({ attrs: { 'stroke-width': strokeWidth }, nameAttr: 'data-lucide' });
+    }
+  }, [name, strokeWidth]);
+  return <span ref={ref} className={"inline-flex items-center justify-center " + className} />;
+};
+
+const Tag = ({ children, tone = "default", className = "" }) => {
+  const tones = {
+    default: "border-line text-muted",
+    accent: "border-[color:var(--accent-line)] text-accent bg-[color:var(--accent-soft)]",
+    solid: "bg-accent text-black border-transparent"
+  };
+  return (
+    <span className={"font-mono text-[10px] uppercase tracking-[0.18em] px-2 py-1 border rounded-sm " + tones[tone] + " " + className}>
+      {children}
+    </span>);
+
+};
+
+const SectionHead = ({ index, kicker, title, sub, alignLeft = true }) =>
+<div className={"mb-10 lg:mb-14 " + (alignLeft ? "" : "text-center")}>
+    <div className={"flex items-center gap-3 mb-5 " + (alignLeft ? "" : "justify-center")}>
+      <span className="font-mono text-[11px] text-accent tracking-[0.22em]">§{String(index).padStart(2, '0')}</span>
+      <span className="ribbed flex-1 max-w-[120px]" />
+      <span className="font-mono text-[11px] text-muted uppercase tracking-[0.22em]">{kicker}</span>
+    </div>
+    <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl leading-[1.02] max-w-4xl">
+      {title}
+    </h2>
+    {sub && <p className="mt-5 text-muted max-w-2xl text-[15px] leading-relaxed">{sub}</p>}
+  </div>;
+
+
+const CTAButton = ({ children, variant = "primary", size = "md", className = "", icon = "arrow-right" }) => {
+  const base = "inline-flex items-center gap-2 font-medium transition-colors";
+  const sizes = { md: "px-5 py-3 text-sm", lg: "px-6 py-3.5 text-[15px]" };
+  const variants = {
+    primary: "bg-accent text-black hover:bg-yellow-300",
+    ghost: "border border-line-strong text-white hover:bg-white/5"
+  };
+  return (
+    <a href="#interesse" className={`${base} ${sizes[size]} ${variants[variant]} ${className}`}>
+      <span>{children}</span>
+      {icon && <Icon name={icon} className="w-4 h-4" />}
+    </a>);
+
+};
+
+/* ==================== TOP BAR ==================== */
+const TopBar = () =>
+<div className="border-b border-line sticky top-0 z-40 backdrop-blur bg-[var(--bg)]/85">
+    <div className="max-w-[1280px] mx-auto px-6 lg:px-10 h-14 flex items-center justify-between">
+      <div className="flex items-center gap-3">
+        <div className="w-7 h-7 bg-accent text-black font-bold font-serif text-lg flex items-center justify-center">XP</div>
+        <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted hidden sm:inline">Imersão Alta Performance</span>
+      </div>
+      <nav className="hidden md:flex items-center gap-6 text-[13px] text-muted">
+        <a className="hover:text-white" href="#resultados">Resultados</a>
+        <a className="hover:text-white" href="#jornada">Jornada</a>
+        <a className="hover:text-white" href="#imersao">Imersão</a>
+        <a className="hover:text-white" href="#cfp">CFP®</a>
+        <a className="hover:text-white" href="#comunidade">Comunidade</a>
+        <a className="hover:text-white" href="#faq">FAQ</a>
+      </nav>
+      <CTAButton size="md" icon={null}>Tenho interesse</CTAButton>
+    </div>
+  </div>;
+
+
+/* ==================== SECTION 01 — HERO ==================== */
+const HeroVisual = () =>
+<div className="relative aspect-[5/6] lg:aspect-auto lg:h-[560px] border border-line bg-surface overflow-hidden">
+    {/* hatched bg */}
+    <div className="absolute inset-0 hatch opacity-60" />
+    {/* corner tickmarks */}
+    {["top-3 left-3", "top-3 right-3", "bottom-3 left-3", "bottom-3 right-3"].map((p) =>
+  <span key={p} className={`absolute ${p} font-mono text-[10px] text-dim`}>+</span>
+  )}
+    {/* tag on top */}
+    <div className="absolute top-4 left-4 flex items-center gap-2">
+      <Tag>Programa piloto · Cohort 2026</Tag>
+      <Tag tone="accent">Pré-lançamento</Tag>
+    </div>
+    {/* central composition: stylized ascension chart */}
+    <svg viewBox="0 0 500 600" className="absolute inset-0 w-full h-full">
+      <defs>
+        <pattern id="dotgrid" width="14" height="14" patternUnits="userSpaceOnUse">
+          <circle cx="1" cy="1" r="0.8" fill="rgba(255,255,255,0.18)" />
+        </pattern>
+      </defs>
+      <rect width="500" height="600" fill="url(#dotgrid)" opacity="0.5" />
+      {/* horizontal axis */}
+      <line x1="40" y1="500" x2="460" y2="500" stroke="rgba(255,255,255,0.25)" strokeDasharray="2 4" />
+      <line x1="40" y1="500" x2="40" y2="80" stroke="rgba(255,255,255,0.25)" strokeDasharray="2 4" />
+      {/* baseline grey bars (low performers) */}
+      {[80, 120, 160, 200, 240, 280, 320].map((x, i) => {
+      const h = 30 + i * 4;
+      return <rect key={i} x={x} y={500 - h} width="22" height={h} fill="rgba(255,255,255,0.16)" />;
+    })}
+      {/* yellow performance bars rising sharply */}
+      {[100, 160, 220, 280, 340, 400].map((x, i) => {
+      const h = 60 + Math.pow(i, 1.7) * 18;
+      return <rect key={i} x={x} y={500 - h} width="22" height={h} fill="#F5C518" opacity={0.45 + i * 0.1} />;
+    })}
+      {/* trend curve */}
+      <path d="M 50,470 C 130,460 180,420 240,340 C 300,260 360,180 460,110" stroke="#F5C518" strokeWidth="2" fill="none" />
+      <circle cx="460" cy="110" r="7" fill="#F5C518" />
+      <circle cx="460" cy="110" r="14" fill="none" stroke="#F5C518" strokeOpacity="0.35" />
+      {/* annotations */}
+      <g fontFamily="Geist Mono" fontSize="10" fill="rgba(255,255,255,0.7)">
+        <text x="50" y="540">GRUPO CONTROLE</text>
+        <text x="280" y="540" fill="#F5C518">GRUPO DA TURMA PILOTO</text>
+      </g>
+      <g fontFamily="Geist Mono" fontSize="9" fill="rgba(255,255,255,0.45)">
+        <text x="48" y="92">PRODUTIVIDADE</text>
+      </g>
+      {/* multiplier callouts — above the curve */}
+      <g>
+        <text x="206" y="306" fontFamily="Geist Mono" fontSize="9" fill="rgba(255,255,255,0.7)">MAPEAMENTO</text>
+        <text x="206" y="336" fontFamily="Instrument Serif" fontSize="26" fill="#F5C518">6×</text>
+        <line x1="200" y1="346" x2="200" y2="378" stroke="#F5C518" strokeOpacity="0.55" />
+
+        <text x="346" y="140" fontFamily="Geist Mono" fontSize="9" fill="rgba(255,255,255,0.7)">CONVERSÃO</text>
+        <text x="346" y="170" fontFamily="Instrument Serif" fontSize="26" fill="#F5C518">4.5×</text>
+        <line x1="340" y1="180" x2="340" y2="218" stroke="#F5C518" strokeOpacity="0.55" />
+      </g>
+    </svg>
+    {/* bottom meta */}
+    <div className="absolute bottom-3 left-4 right-4 flex items-end justify-between">
+      <div className="font-mono text-[10px] text-dim">Fig. 01 · Tese de elevação técnica do escritório</div>
+      <div className="font-mono text-[10px] text-dim">N=PILOTO XP</div>
+    </div>
+  </div>;
+
+
+const HeroSeals = () => {
+  const pillars = [
+  { n: "01", icon: "users-round", t: "Imersão presencial de 3 dias", s: "Três dias intensivos no escritório XP de São Paulo. Cases reais, prática com IA, networking entre pares." },
+  { n: "02", icon: "cpu", t: "Conteúdo online + IA de prática", s: "Simulações de atendimento, análise de pitch e treino de objeções para evolução contínua." },
+  { n: "03", icon: "calendar-heart", t: "Eventos exclusivos da rede", s: "Advisor Experience + ExpertXP incluídos para todos os participantes." },
+  { n: "04", icon: "award", t: "CFP® + Comunidade vitalícia", s: "O destino natural da trilha. Consultora Educacional dedicada e acesso vitalício à rede dos planejadores de alta performance.", highlight: true }];
+
+  return (
+    <div className="mt-10 border border-line">
+      <div className="flex items-center justify-between px-4 lg:px-5 py-2.5 border-b border-line bg-[var(--surface)]">
+        <span className="font-mono text-[10px] text-accent tracking-[0.22em]">4 PILARES DA FORMAÇÃO</span>
+        <span className="font-mono text-[10px] text-dim tracking-[0.22em] hidden md:inline">IMERSÃO → IA → REDE → CFP®</span>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+        {pillars.map((p, i) =>
+        <div key={i} className={
+        "p-5 lg:p-6 flex flex-col gap-3 " + (
+        p.highlight ? "bg-[color:var(--accent-soft)] " : "") + (
+        i < pillars.length - 1 ? "lg:border-r border-line " : "") + (
+        i < pillars.length - 1 ? "border-b lg:border-b-0 border-line" : "")
+        }>
+            <div className="flex items-center justify-between">
+              <span className={"font-mono text-[10px] tracking-[0.22em] " + (p.highlight ? "text-accent" : "text-dim")}>{p.n}</span>
+              <Icon name={p.icon} className={"w-4 h-4 " + (p.highlight ? "text-accent" : "text-muted")} />
+            </div>
+            <div className="font-serif text-[18px] lg:text-[20px] leading-tight">
+              {p.highlight ? <><span className="text-accent">CFP®</span> + Comunidade vitalícia</> : p.t}
+            </div>
+            <div className="text-[12px] text-muted leading-snug">{p.s}</div>
+          </div>
+        )}
+      </div>
+    </div>);
+
+};
+
+const Hero = () =>
+<section className="relative border-b border-line">
+    <div className="absolute inset-0 grid-bg opacity-40 pointer-events-none" />
+    <div className="max-w-[1280px] mx-auto px-6 lg:px-10 pt-12 lg:pt-20 pb-14 lg:pb-20 relative">
+      {/* meta strip */}
+      <div className="flex flex-wrap items-center gap-3 mb-8">
+        <Tag tone="accent">PRÉ LANÇAMENTO EXCLUSIVO DO B2B EXPERIENCE</Tag>
+        <Tag>Vagas limitadas · Inscrições abrem em maio</Tag>
+        <span className="hidden md:inline font-mono text-[10px] text-dim ticker">REF · LP/IAP/V1</span>
+      </div>
+
+      <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+        <div className="lg:col-span-7">
+          <h1 className="font-serif text-[44px] sm:text-6xl lg:text-[80px] leading-[0.98] tracking-[-0.02em]">
+            Formação de assessores de  <span className="italic text-accent">alta performance</span><br />
+            
+          </h1>
+          <p className="mt-7 text-[16px] lg:text-[17px] text-muted max-w-2xl leading-relaxed">
+            Profissionais mais qualificados mapeiam <span className="text-white font-medium">6× mais oportunidades</span> e convertem <span className="text-white font-medium">4,5× mais</span>. Mais duration. Mais satisfação dos clientes. A XP está elevando o nível de qualidade dos profissionais no mercado — e esta é a <span className="text-white font-medium">porta de entrada</span> para a trilha.
+          </p>
+          <div className="mt-8 flex flex-wrap items-center gap-4">
+            <CTAButton variant="primary" size="lg">Tenho interesse</CTAButton>
+            <a href="#resultados" className="text-sm text-muted hover:text-white inline-flex items-center gap-2">
+              Ver a tese em números <Icon name="arrow-down" className="w-4 h-4" />
+            </a>
+          </div>
+          <HeroSeals />
+        </div>
+        <div className="lg:col-span-5">
+          <HeroVisual />
+        </div>
+      </div>
+    </div>
+  </section>;
+
+
+/* ==================== SECTION 02 — RESULTADOS ==================== */
+const FunnelRow = ({ n, name, mult, pilotoW, controlW, placeholder }) =>
+<div className="grid grid-cols-12 gap-4 lg:gap-6 items-center py-6 lg:py-8 border-b border-line last:border-b-0">
+    {/* stage label */}
+    <div className="col-span-12 md:col-span-3 flex items-baseline gap-3 md:gap-4">
+      <span className="font-mono text-[11px] text-dim tracking-[0.22em]">{n}</span>
+      <span className="font-serif text-[20px] lg:text-[22px] leading-tight">{name}</span>
+    </div>
+    {/* bars */}
+    <div className="col-span-8 md:col-span-7">
+      <div className="space-y-2">
+        <div className="h-2.5 bg-white/30" style={{ width: controlW + "%" }} />
+        <div className={"h-2.5 " + (placeholder ? "bg-accent/45 hatch-accent" : "bg-accent")} style={{ width: pilotoW + "%" }} />
+      </div>
+    </div>
+    {/* multiplier */}
+    <div className="col-span-4 md:col-span-2 text-right">
+      <span className="font-serif text-[56px] lg:text-[80px] text-accent leading-none tracking-[-0.02em]">{mult}</span>
+    </div>
+  </div>;
+
+
+const CaptureFunnel = () =>
+<div className="mt-10 lg:mt-14 border border-line bg-surface">
+    {/* exhibit header */}
+    <div className="px-6 lg:px-10 pt-7 lg:pt-9 pb-6 lg:pb-8 border-b border-line">
+      <div className="flex items-center justify-between mb-5">
+        <span className="font-mono text-[10px] tracking-[0.22em] text-accent">EXHIBIT 01</span>
+        <span className="font-mono text-[10px] tracking-[0.22em] text-dim hidden md:inline">PILOTO ÷ CONTROLE · PROGRAMA PILOTO</span>
+      </div>
+      <h3 className="font-serif text-[26px] lg:text-[32px] leading-[1.1] max-w-3xl">
+        O efeito composto se acumula <span className="italic text-accent">etapa após etapa</span> do funil.
+      </h3>
+    </div>
+    {/* rows */}
+    <div className="px-6 lg:px-10">
+      <FunnelRow n="01" name="Mapeamento de oportunidades" mult="6×" pilotoW={100} controlW={17} />
+      <FunnelRow n="02" name="Conversão em clientes" mult="4.5×" pilotoW={66} controlW={15} />
+      <FunnelRow n="03" name="AuC médio por cliente" mult="[X]×" pilotoW={36} controlW={14} placeholder />
+    </div>
+    {/* legend + source */}
+    <div className="px-6 lg:px-10 py-4 border-t border-line flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+      <div className="flex items-center gap-5 font-mono text-[10px] tracking-[0.18em] uppercase">
+        <span className="flex items-center gap-2 text-muted"><span className="w-4 h-1.5 bg-white/30" /> Grupo controle</span>
+        <span className="flex items-center gap-2 text-accent"><span className="w-4 h-1.5 bg-accent" /> Grupo piloto</span>
+      </div>
+      <div className="font-mono text-[10px] text-dim tracking-[0.18em] uppercase">
+        Fonte: programa piloto interno. AuC médio · valor preliminar.
+      </div>
+    </div>
+  </div>;
+
+
+const Testimonial = ({ name, role, firm, quote }) =>
+<figure className="border border-line bg-surface p-5">
+    <div className="flex items-center gap-3 mb-4">
+      <div className="w-11 h-11 border border-line hatch shrink-0 relative">
+        <span className="absolute inset-0 flex items-center justify-center font-mono text-[10px] text-dim">FOTO</span>
+      </div>
+      <div>
+        <div className="text-[13px] font-medium leading-tight">{name}</div>
+        <div className="text-[11px] text-muted">{role} · {firm}</div>
+      </div>
+    </div>
+    <blockquote className="font-serif text-[17px] leading-snug text-white/90 before:content-['“'] before:text-accent before:mr-1 after:content-['”'] after:text-accent after:ml-1">
+      {quote}
+    </blockquote>
+  </figure>;
+
+
+const Section02 = () =>
+<section id="resultados" className="border-b border-line">
+    <div className="max-w-[1280px] mx-auto px-6 lg:px-10 py-16 lg:py-24">
+      <SectionHead
+      index={2}
+      kicker="O resultado em números"
+      title={<>Mais em <span className="italic">cada</span> etapa do funil.</>}
+      sub="Piloto vs. grupo controle." />
+
+      <CaptureFunnel />
+    </div>
+  </section>;
+
+
+/* ==================== SECTION 03 — DIFERENCIAIS ==================== */
+const Section03 = () => {
+  const items = [
+  { ic: "target", n: "01", t: "Técnica de prospecção apurada", s: "Mapeamento sistemático de oportunidades, não dependência de sorte ou indicação." },
+  { ic: "banknote", n: "02", t: "Capacidade de fechar grandes contas", s: "Cliente de alto patrimônio compra plano antes de produto. Repertório técnico destrava o ticket." },
+  { ic: "heart-handshake", n: "03", t: "Relacionamento que retém", s: "Mais duration. Mais satisfação. Carteira que cresce em vez de girar." },
+  { ic: "flame", n: "04", t: "Mentalidade de top performer", s: "Disciplina, rotina e processo dos profissionais que estão entre os melhores da rede.", highlight: true }];
+
+  return (
+    <section className="border-b border-line bg-[var(--bg-2)]">
+      <div className="max-w-[1280px] mx-auto px-6 lg:px-10 py-10 lg:py-14">
+        {/* meta strip */}
+        <div className="flex items-center gap-3 mb-6">
+          <span className="font-mono text-[11px] text-accent tracking-[0.22em]">§03</span>
+          <span className="ribbed flex-1 max-w-[120px]" />
+          <span className="font-mono text-[11px] text-muted uppercase tracking-[0.22em]">Diferenciais</span>
+        </div>
+
+        {/* Alta Performance lockup + title */}
+        <div className="grid lg:grid-cols-12 gap-6 lg:gap-10 items-center mb-8 lg:mb-10">
+          <div className="lg:col-span-4">
+            <div className="border border-accent bg-[color:var(--accent-soft)] px-5 py-4 lg:px-6 lg:py-5 relative">
+              <span className="absolute top-2 left-3 font-mono text-[9px] text-accent tracking-[0.22em]">PRÁTICA DE ALTA PERFORMANCE</span>
+              <div className="flex items-baseline gap-3 mt-5">
+                <span className="font-serif text-[64px] lg:text-[92px] leading-[0.82] text-accent tracking-[-0.04em]">6×</span>
+                <span className="font-serif text-[36px] lg:text-[48px] text-dim leading-none">·</span>
+                <span className="font-serif text-[64px] lg:text-[92px] leading-[0.82] text-accent tracking-[-0.04em]">4,5×</span>
+              </div>
+              <div className="mt-3 pt-3 border-t border-[color:var(--accent-line)] font-mono text-[10px] text-accent tracking-[0.18em] uppercase">Mapeamento · Conversão</div>
+              <div className="mt-1.5 text-[12px] text-white/90 leading-snug">Multiplicadores medidos no programa piloto.</div>
+            </div>
+          </div>
+          <div className="lg:col-span-8">
+            <h2 className="font-serif text-4xl md:text-5xl lg:text-[52px] leading-[1.02] tracking-[-0.01em]">
+              O que um <span className="italic text-accent">assessor de alta performance</span> entrega ao escritório.
+            </h2>
+            <p className="mt-4 text-muted text-[14px] leading-relaxed max-w-xl">
+              Quatro atributos que separam o profissional que vai longe dos demais. O CFP® é o ponto onde tudo se consolida.
+            </p>
+          </div>
+        </div>
+
+        {/* 4 differentiators — 2x2 grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-[var(--line)] border border-line">
+          {items.map((it, i) =>
+          <div key={i} className={"p-6 lg:p-7 group relative " + (it.highlight ? "bg-[color:var(--accent-soft)]" : "bg-[var(--bg-2)]")}>
+              <div className="flex items-center justify-between mb-4">
+                <span className="font-serif text-[40px] lg:text-[44px] text-accent leading-none tracking-[-0.02em]">{it.n}</span>
+                <Icon name={it.ic} className="w-5 h-5 text-accent" />
+              </div>
+              <h3 className="font-serif text-xl lg:text-[24px] leading-snug">{it.t}</h3>
+              <p className="mt-2.5 text-[13px] text-muted leading-relaxed">{it.s}</p>
+              {it.highlight ?
+            <div className="mt-4 pt-4 border-t border-[color:var(--accent-line)] flex items-center gap-2 font-mono text-[10px] text-accent tracking-[0.22em] uppercase">
+                  <Icon name="arrow-right" className="w-3.5 h-3.5" />
+                  Consolidado com a certificação CFP®
+                </div> :
+
+            <div className="ribbed mt-5 group-hover:bg-accent" />
+            }
+            </div>
+          )}
+        </div>
+      </div>
+    </section>);
+
+};
+
+/* ==================== SECTION 04 — JORNADA ==================== */
+const PhaseCard = ({ idx, period, title, lead, items, accent }) =>
+<div className={"border border-line bg-surface p-6 lg:p-7 relative " + (accent ? "lg:-mt-6" : "")}>
+    <div className="flex items-center justify-between mb-3">
+      <span className="font-mono text-[11px] text-accent tracking-[0.22em]">FASE {idx}</span>
+      <span className="font-mono text-[11px] text-muted tracking-[0.18em]">{period}</span>
+    </div>
+    <h3 className="font-serif text-[26px] lg:text-[30px] leading-tight">{title}</h3>
+    <p className="text-[13px] text-muted mt-2 leading-relaxed">{lead}</p>
+    <ul className="mt-5 space-y-3">
+      {items.map((it, i) =>
+    <li key={i} className="flex gap-3">
+          <span className="mt-1 w-1.5 h-1.5 bg-accent shrink-0" />
+          <div>
+            <div className="text-[13px] font-medium">{it.t}</div>
+            <div className="text-[12px] text-muted leading-snug">{it.s}</div>
+          </div>
+        </li>
+    )}
+    </ul>
+  </div>;
+
+
+const TimelineRail = () =>
+<div className="relative mb-8 hidden lg:block">
+    {/* horizontal rule */}
+    <div className="h-px bg-line-strong" style={{ background: "var(--line-strong)" }} />
+    <div className="grid grid-cols-3 -mt-2">
+      {[
+    { t: "MAI – JUL", l: "Imersão + Prática" },
+    { t: "JUL", l: "Conexão com a Rede" },
+    { t: "AGO+", l: "O salto: CFP® + Comunidade" }].
+    map((m, i) =>
+    <div key={i} className="flex flex-col items-start">
+          <div className="w-3 h-3 bg-accent rotate-45" />
+          <div className="font-mono text-[11px] text-accent mt-2 tracking-[0.22em]">{m.t}</div>
+          <div className="font-mono text-[10px] text-muted tracking-[0.18em]">{m.l}</div>
+        </div>
+    )}
+    </div>
+  </div>;
+
+
+const Section04 = () =>
+<section id="jornada" className="border-b border-line">
+    <div className="max-w-[1280px] mx-auto px-6 lg:px-10 py-16 lg:py-24">
+      <SectionHead
+      index={4}
+      kicker="A jornada"
+      title={<>Formação <span className="italic">completa</span> em três fases.</>}
+      sub="Pensada para entregar repertório, prática e — quando você estiver pronto — a certificação que coroa a trilha." />
+    
+      <TimelineRail />
+      <div className="grid lg:grid-cols-3 gap-5">
+        <PhaseCard
+        idx="01" period="MAI – JUL"
+        title="Imersão e Prática"
+        lead="Três dias intensivos em São Paulo + conteúdo online de apoio + ferramenta de IA para prática contínua."
+        items={[
+        { t: "Imersão presencial · 3 dias em São Paulo", s: "Cases reais e exercícios práticos com top performers da rede." },
+        { t: "Conteúdo online sob demanda", s: "Aulas, materiais e exercícios para revisitar antes, durante e depois." },
+        { t: "IA para simulações, pitch e objeções", s: "Prática contínua na rotina, com feedback técnico imediato." }]
+        } />
+        <PhaseCard
+        accent
+        idx="02" period="JUL"
+        title="Conexão com a Rede"
+        lead="Os dois eventos exclusivos do calendário XP. Onde você se conecta com os melhores da rede."
+        items={[
+        { t: "Advisor Experience", s: "Um dia na semana da ExpertXP — encontro dos melhores assessores e consultores." },
+        { t: "ExpertXP", s: "Acesso à maior feira de investimentos do mundo." },
+        { t: "Networking estratégico", s: "Mesa redonda entre pares e líderes da assessoria." }]
+        } />
+        <PhaseCard
+        idx="03" period="A PARTIR DE AGO"
+        title="A Certificação e a Comunidade"
+        lead="O salto. Consultora Educacional dedicada, certificação CFP® e acesso à comunidade dos planejadores de alta performance — vitalício."
+        items={[
+        { t: "CFP® com Consultora Educacional XP", s: "Plano individual sob medida, do diagnóstico à prova." },
+        { t: "Comunidade exclusiva (pós-aprovação)", s: "Acesso permanente à rede dos planejadores de referência." },
+        { t: "Network vitalício", s: "Top performers, líderes da assessoria e iniciativas estratégicas da XP." }]
+        } />
+      </div>
+    </div>
+  </section>;
+
+
+/* ==================== SECTION 05 — PROFESSORES ==================== */
+const TeacherCard = ({ n, name, role, indicators }) =>
+<div className="border border-line bg-surface p-5">
+    <div className="aspect-[4/5] border border-line hatch relative mb-4">
+      <span className="absolute top-2 left-2 font-mono text-[10px] text-dim">{n}</span>
+      <span className="absolute bottom-2 right-2 font-mono text-[10px] text-dim">FOTO</span>
+      <div className="absolute inset-0 flex items-center justify-center text-dim">
+        <Icon name="user-round" className="w-10 h-10" />
+      </div>
+    </div>
+    <div className="font-serif text-xl leading-tight">{name}</div>
+    <div className="text-[12px] text-muted mt-0.5">{role}</div>
+    <ul className="mt-4 space-y-2">
+      {indicators.map((ind, i) =>
+    <li key={i} className="flex items-baseline gap-2">
+          <span className="text-accent font-mono text-[10px] tracking-[0.16em] uppercase shrink-0">●</span>
+          <span className="text-[12.5px] text-white/90">{ind}</span>
+        </li>
+    )}
+    </ul>
+  </div>;
+
+
+const Section05 = () => {
+  const teachers = [
+  { n: "P-01", name: "[Nome do Professor]", role: "Planejador Sênior", indicators: ["+15 anos de mercado", "AuC [R$ X bi]", "Top 1% da rede"] },
+  { n: "P-02", name: "[Nome da Professora]", role: "Planejadora", indicators: ["CFP® · CFA", "AuC [R$ X bi]", "Especialista em sucessão"] },
+  { n: "P-03", name: "[Nome do Professor]", role: "Head de Planejamento", indicators: ["+12 anos de mercado", "Foco em high net-worth", "Mentor da rede"] },
+  { n: "P-04", name: "[Nome do Professor]", role: "Planejador", indicators: ["CFP® · MBA", "AuC [R$ X bi]", "Top performer 2024"] },
+  { n: "P-05", name: "[Nome da Professora]", role: "Planejadora Sênior", indicators: ["+10 anos · Family Office", "AuC [R$ X bi]", "Palestrante ExpertXP"] },
+  { n: "P-06", name: "[Nome do Professor]", role: "Planejador", indicators: ["CFP®", "Especialista em tributário PF", "Mentor da formação"] }];
+
+  return (
+    <section className="border-b border-line bg-[var(--bg-2)]">
+      <div className="max-w-[1280px] mx-auto px-6 lg:px-10 py-16 lg:py-24">
+        <SectionHead
+          index={5}
+          kicker="Professores"
+          title={<>Aprenda com quem está colhendo o resultado que <span className="italic">você quer</span>.</>}
+          sub="Os melhores planejadores financeiros — entre os melhores do Brasil — ministrando o curso." />
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {teachers.map((t, i) => <TeacherCard key={i} {...t} />)}
+        </div>
+        <div className="mt-6 font-mono text-[10px] text-dim tracking-[0.18em] uppercase">Corpo docente em formação. Nomes confirmados na abertura das inscrições.</div>
+      </div>
+    </section>);
+
+};
+
+/* ==================== SECTION 06 — TRILHA INDIVIDUAL ==================== */
+const FlowStep = ({ n, ic, t, s, last }) =>
+<div className="flex-1 relative">
+    <div className="border border-line bg-surface p-5 h-full">
+      <div className="flex items-center justify-between mb-3">
+        <span className="font-mono text-[11px] text-accent tracking-[0.22em]">ETAPA {n}</span>
+        <Icon name={ic} className="w-5 h-5 text-accent" />
+      </div>
+      <div className="font-serif text-xl leading-tight">{t}</div>
+      <div className="text-[12.5px] text-muted mt-2 leading-snug">{s}</div>
+    </div>
+    {!last &&
+  <div className="hidden lg:flex absolute -right-4 top-1/2 -translate-y-1/2 z-10">
+        <svg width="32" height="22" viewBox="0 0 32 22" fill="none">
+          <line x1="0" y1="11" x2="22" y2="11" stroke="#F5C518" strokeWidth="1.4" />
+          <path d="M20 5 L30 11 L20 17" stroke="#F5C518" strokeWidth="1.4" fill="none" />
+        </svg>
+      </div>
+  }
+  </div>;
+
+
+const StudyMosaic = () =>
+<div className="grid grid-cols-7 gap-1 mt-4">
+    {Array.from({ length: 35 }).map((_, i) => {
+    const intensity = [0, 0, 1, 0, 2, 0, 0, 0, 3, 0, 0, 0, 2, 1, 1, 0, 0, 3, 0, 0, 2, 0, 0, 2, 0, 1, 0, 0, 3, 0, 1, 0, 0, 2, 0][i];
+    const colors = ["bg-white/5", "bg-accent/30", "bg-accent/60", "bg-accent"];
+    return <div key={i} className={"aspect-square " + colors[intensity]} />;
+  })}
+  </div>;
+
+
+const Section06 = () => {
+  const days = [
+  { n: "01", ic: "compass", t: "Mindset + Prospecção", bullets: [
+    "Mentalidade de top performer · rotina e métricas",
+    "Técnicas de prospecção apurada e cadência comercial",
+    "Identificação de oportunidades na carteira existente"]
+  },
+  { n: "02", ic: "handshake", t: "Relacionamento + Captação", accent: true, bullets: [
+    "Relacionamento que retém: aderência e NPS",
+    "Captação de grandes contas e ancoragem de patrimônio",
+    "Tratamento de objeções e fechamento"]
+  },
+  { n: "03", ic: "presentation", t: "Cases + Plano de Ação", bullets: [
+    "Estudos de caso de top performers da rede",
+    "Exercícios práticos e simulações em grupo",
+    "Plano de ação individual para os próximos 90 dias"]
+  }];
+
+
+  return (
+    <section id="imersao" className="border-b border-line">
+      <div className="max-w-[1280px] mx-auto px-6 lg:px-10 py-16 lg:py-24">
+        <SectionHead
+          index={6}
+          kicker="A imersão"
+          title={<>Três dias no escritório XP de São Paulo. <span className="italic text-accent">E uma IA que treina com você o ano todo.</span></>}
+          sub="A imersão presencial é desenhada para transformar produtividade — não apenas entregar teoria. A IA estende o aprendizado para o dia-a-dia." />
+
+        {/* Days flow */}
+        <div className="mt-10 lg:mt-12 relative">
+          <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
+            {days.map((d, i) =>
+            <div key={i} className="flex-1 relative">
+                <div className={"border bg-surface p-6 lg:p-7 h-full " + (d.accent ? "border-accent bg-[color:var(--accent-soft)]" : "border-line")}>
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="font-mono text-[11px] text-accent tracking-[0.22em]">DIA {d.n}</span>
+                    <Icon name={d.ic} className="w-5 h-5 text-accent" />
+                  </div>
+                  <div className="font-serif text-[24px] lg:text-[28px] leading-tight">{d.t}</div>
+                  <ul className="mt-5 space-y-2.5">
+                    {d.bullets.map((b, j) =>
+                  <li key={j} className="flex gap-3 text-[13.5px] leading-snug">
+                        <span className="text-accent shrink-0">▸</span>
+                        <span>{b}</span>
+                      </li>
+                  )}
+                  </ul>
+                </div>
+                {i < days.length - 1 &&
+              <div className="hidden lg:flex absolute -right-6 top-1/2 -translate-y-1/2 z-10">
+                    <svg width="40" height="22" viewBox="0 0 40 22" fill="none">
+                      <line x1="0" y1="11" x2="30" y2="11" stroke="#F5C518" strokeWidth="1.4" />
+                      <path d="M28 5 L38 11 L28 17" stroke="#F5C518" strokeWidth="1.4" fill="none" />
+                    </svg>
+                  </div>
+              }
+              </div>
+            )}
+          </div>
+
+          {/* IA enabler bar */}
+          <div className="mt-10 lg:mt-12 border border-accent bg-[color:var(--accent-soft)] relative">
+            {/* upward chevrons connecting to each day */}
+            <div className="hidden lg:grid absolute -top-2 left-0 right-0 grid-cols-3 pointer-events-none">
+              {days.map((_, i) =>
+              <div key={i} className="flex justify-center">
+                  <svg width="14" height="8" viewBox="0 0 14 8" fill="none">
+                    <path d="M7 0 L14 8 L0 8 Z" fill="var(--bg)" stroke="#F5C518" strokeWidth="1" />
+                  </svg>
+                </div>
+              )}
+            </div>
+            <div className="p-6 lg:p-7 grid grid-cols-1 lg:grid-cols-[auto_1fr] items-center gap-6">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-accent text-black flex items-center justify-center shrink-0">
+                  <Icon name="cpu" className="w-5 h-5" strokeWidth={1.8} />
+                </div>
+                <div>
+                  <div className="font-mono text-[10px] text-accent tracking-[0.22em]">INTELIGÊNCIA ARTIFICIAL · ENABLER</div>
+                  <div className="font-serif text-[22px] lg:text-[26px] leading-tight mt-1">Prática contínua entre os dias presenciais e na rotina.</div>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="border border-[color:var(--accent-line)] bg-[var(--bg)] p-3 flex items-center gap-2">
+                  <Icon name="messages-square" className="w-4 h-4 text-accent shrink-0" />
+                  <div className="text-[13px]">Simulações de atendimento</div>
+                </div>
+                <div className="border border-[color:var(--accent-line)] bg-[var(--bg)] p-3 flex items-center gap-2">
+                  <Icon name="mic" className="w-4 h-4 text-accent shrink-0" />
+                  <div className="text-[13px]">Análise de pitch</div>
+                </div>
+                <div className="border border-[color:var(--accent-line)] bg-[var(--bg)] p-3 flex items-center gap-2">
+                  <Icon name="shield-check" className="w-4 h-4 text-accent shrink-0" />
+                  <div className="text-[13px]">Treinamento de objeções</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>);
+
+};
+
+
+/* ==================== INTERLUDE — PAGE TURN ==================== */
+const Interlude = () =>
+<section className="border-b border-line bg-[var(--bg)] relative overflow-hidden">
+    <div className="absolute inset-0 grid-bg opacity-40 pointer-events-none" />
+    <div className="max-w-[1280px] mx-auto px-6 lg:px-10 py-20 lg:py-32 relative">
+      {/* top printed-marker — what we just covered */}
+      <div className="flex items-center gap-4 mb-12 lg:mb-16">
+        <span className="font-mono text-[10px] text-accent tracking-[0.22em]">PARTE I · CONCLUÍDA</span>
+        <span className="ribbed flex-1" />
+        <span className="font-mono text-[10px] text-muted tracking-[0.22em] hidden md:inline">MÓDULO 01 · IMERSÃO DE ALTA PERFORMANCE</span>
+      </div>
+
+      {/* Recap: 3 compact pills of what Part I covered */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 max-w-3xl mb-16 lg:mb-20">
+        {[
+          { ic: "users-round", t: "3 dias presenciais em SP" },
+          { ic: "cpu",         t: "IA contínua para prática" },
+          { ic: "calendar-heart", t: "Advisor Experience + ExpertXP" },
+        ].map((p, i) =>
+          <div key={i} className="flex items-center gap-3 border border-line px-3 py-2.5">
+            <Icon name={p.ic} className="w-4 h-4 text-muted" />
+            <span className="text-[12.5px] text-muted leading-snug">{p.t}</span>
+          </div>
+        )}
+      </div>
+
+      {/* Page-turn — big serif statement */}
+      <div className="grid lg:grid-cols-12 gap-10 items-end">
+        <div className="lg:col-span-3 hidden lg:block">
+          {/* Decorative big "II" */}
+          <div className="font-serif text-[260px] text-accent leading-[0.78] tracking-[-0.05em]">II</div>
+          <div className="mt-3 font-mono text-[10px] text-accent tracking-[0.22em]">PARTE II · A PARTIR DAQUI</div>
+        </div>
+        <div className="lg:col-span-9">
+          <div className="lg:hidden font-serif text-[120px] text-accent leading-[0.78] tracking-[-0.05em] mb-4">II</div>
+          <div className="lg:hidden font-mono text-[10px] text-accent tracking-[0.22em] mb-6">PARTE II · A PARTIR DAQUI</div>
+          <h2 className="font-serif text-4xl md:text-5xl lg:text-[68px] leading-[1.02] tracking-[-0.01em]">
+            Pode parar por aqui... ou seguir  <span className="italic text-accent">até o fim</span>.
+          </h2>
+          <p className="mt-6 text-[16px] lg:text-[18px] text-muted leading-relaxed max-w-2xl">
+            Tudo que você viu até agora é a <span className="text-white">Imersão de Alta Performance</span>, e pode ser feita sozinha. A partir daqui, descrevemos a <span className="text-accent">formação completa</span> — o caminho que recomendamos para quem quer o salto de carreira. <span className="italic"></span>
+          </p>
+          <div className="mt-8 flex items-center gap-3">
+            <span className="font-mono text-[10px] text-accent tracking-[0.22em]">PRÓXIMAS SEÇÕES</span>
+            <span className="ribbed flex-1 max-w-[60px]" />
+            <span className="font-mono text-[10px] text-muted tracking-[0.22em]">07 · O CFP®</span>
+            <span className="text-dim">·</span>
+            <span className="font-mono text-[10px] text-muted tracking-[0.22em]">O PREPARATÓRIO</span>
+            <span className="text-dim">·</span>
+            <span className="font-mono text-[10px] text-muted tracking-[0.22em]">A COMUNIDADE</span>
+          </div>
+        </div>
+      </div>
+
+      {/* bottom marker — chapter open */}
+      <div className="mt-12 lg:mt-16 flex items-center gap-4">
+        <span className="font-mono text-[10px] text-muted tracking-[0.22em] hidden md:inline">MÓDULO 02 · A FORMAÇÃO COMPLETA</span>
+        <span className="ribbed flex-1" />
+        <span className="font-mono text-[10px] text-accent tracking-[0.22em]">RECOMENDADA ↓</span>
+      </div>
+    </div>
+  </section>;
+
+
+/* ==================== SECTION 07 — COMUNIDADE ==================== */
+const NetworkVisual = () =>
+<div className="relative aspect-square w-full max-w-[420px] mx-auto">
+    <svg viewBox="0 0 400 400" className="w-full h-full">
+      <defs>
+        <radialGradient id="rg" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#F5C518" stopOpacity="0.5" />
+          <stop offset="100%" stopColor="#F5C518" stopOpacity="0" />
+        </radialGradient>
+      </defs>
+      <circle cx="200" cy="200" r="180" fill="url(#rg)" />
+      <circle cx="200" cy="200" r="180" fill="none" stroke="rgba(255,255,255,0.1)" strokeDasharray="2 4" />
+      <circle cx="200" cy="200" r="120" fill="none" stroke="rgba(255,255,255,0.12)" strokeDasharray="2 4" />
+      <circle cx="200" cy="200" r="60" fill="none" stroke="rgba(255,255,255,0.18)" strokeDasharray="2 4" />
+      {/* nodes */}
+      {Array.from({ length: 18 }).map((_, i) => {
+      const a = i / 18 * Math.PI * 2;
+      const r = 180;
+      const x = 200 + Math.cos(a) * r;
+      const y = 200 + Math.sin(a) * r;
+      return <g key={i}>
+          <line x1="200" y1="200" x2={x} y2={y} stroke="#F5C518" strokeOpacity="0.18" />
+          <circle cx={x} cy={y} r="4" fill="#F5C518" opacity="0.9" />
+        </g>;
+    })}
+      {Array.from({ length: 10 }).map((_, i) => {
+      const a = i / 10 * Math.PI * 2;
+      const r = 120;
+      const x = 200 + Math.cos(a) * r;
+      const y = 200 + Math.sin(a) * r;
+      return <circle key={"m" + i} cx={x} cy={y} r="6" fill="#fff" opacity="0.6" />;
+    })}
+      <circle cx="200" cy="200" r="14" fill="#F5C518" />
+      <text x="200" y="205" textAnchor="middle" fontFamily="Geist Mono" fontSize="10" fill="#000" fontWeight="600">XP</text>
+    </svg>
+    <div className="absolute bottom-0 left-0 right-0 text-center font-mono text-[10px] text-dim tracking-[0.18em]">FIG. 04 · REDE DE PARES DE ALTA PERFORMANCE</div>
+  </div>;
+
+
+const Section07 = () => {
+  const cfpItems = [
+  { ic: "layers", n: "01", t: "Nível técnico mais aprofundado", s: "Domínio de planejamento patrimonial, sucessório, tributário e de investimentos no mesmo profissional." },
+  { ic: "award", n: "02", t: "Maior referência no mercado", s: "Posicionamento de planejador — não de vendedor de produto. Reconhecimento institucional." },
+  { ic: "banknote", n: "03", t: "Mais facilidade em gestão e captação de grandes contas", s: "Cliente de alto patrimônio compra plano antes de comprar produto. CFP® destrava o ticket." }];
+  const trailSteps = [
+  { n: "01", ic: "messages-square", t: "Diagnóstico", s: "Aluno + Consultoria Educacional mapeiam pontos fortes e gaps em conjunto, e elaboram seu plano de estudos." },
+  { n: "02", ic: "calendar-check", t: "Plano individual", s: "Calendário sob medida, blocos por matéria, marcos quinzenais." },
+  { n: "03", ic: "book-open", t: "Estudo planejado", s: "Conteúdo encaixado em horários flexíveis, ao redor da rotina comercial." },
+  { n: "04", ic: "repeat", t: "Follow up", s: "Check-ins periódicos. Plano se ajusta ao ritmo e ao desempenho." },
+  { n: "05", ic: "trophy", t: "Prova CFP®", s: "Meta final. Suporte da Consultora até a aprovação." }];
+
+  return (
+    <section id="cfp" className="border-b border-line bg-[var(--bg-2)]">
+      <div className="max-w-[1280px] mx-auto px-6 lg:px-10 py-16 lg:py-24">
+        {/* meta strip */}
+        <div className="flex items-center gap-3 mb-8">
+          <span className="font-mono text-[11px] text-accent tracking-[0.22em]">§07</span>
+          <span className="ribbed flex-1 max-w-[120px]" />
+          <span className="font-mono text-[11px] text-muted uppercase tracking-[0.22em]">O salto</span>
+        </div>
+
+        {/* Block 1 — CFP lockup + destino natural */}
+        <div className="grid lg:grid-cols-12 gap-6 lg:gap-10 items-center mb-12 lg:mb-14">
+          <div className="lg:col-span-5">
+            <div className="border border-accent bg-[color:var(--accent-soft)] px-5 py-4 lg:px-6 lg:py-5 relative">
+              <span className="absolute top-2 left-3 font-mono text-[9px] text-accent tracking-[0.22em]">CERTIFICAÇÃO</span>
+              <div className="flex items-baseline gap-1.5 mt-3">
+                <span className="font-serif text-[88px] lg:text-[120px] leading-[0.82] text-accent tracking-[-0.04em]">CFP</span>
+                <span className="font-serif text-[30px] lg:text-[40px] text-accent leading-none">®</span>
+              </div>
+              <div className="mt-3 pt-3 border-t border-[color:var(--accent-line)] font-mono text-[10px] text-accent tracking-[0.18em] uppercase">Certified Financial Planner</div>
+              <div className="mt-1.5 text-[12px] text-white/90 leading-snug">Reconhecida pela <span className="text-accent">Planejar</span> — padrão internacional do planejamento financeiro.</div>
+            </div>
+          </div>
+          <div className="lg:col-span-7">
+            <h2 className="font-serif text-4xl md:text-5xl lg:text-[56px] leading-[1.02] tracking-[-0.01em]">
+              O <span className="italic text-accent">destino natural</span> da sua trilha de alta performance.
+            </h2>
+            <p className="mt-5 text-muted text-[15px] leading-relaxed max-w-xl">
+              O CFP® é o ponto de inflexão da carreira. Reconhecimento institucional, repertório técnico completo e a chave para a comunidade dos melhores da rede. <span className="text-white">Quando você estiver pronto para o salto, a XP entra com você.</span>
+            </p>
+          </div>
+        </div>
+
+        {/* Block 2 — 3 CFP differentiators */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-[var(--line)] border border-line mb-12 lg:mb-14">
+          {cfpItems.map((it, i) =>
+          <div key={i} className="bg-[var(--bg-2)] p-6 lg:p-7 group relative">
+              <div className="flex items-center justify-between mb-4">
+                <span className="font-serif text-[40px] lg:text-[44px] text-accent leading-none tracking-[-0.02em]">{it.n}</span>
+                <Icon name={it.ic} className="w-5 h-5 text-accent" />
+              </div>
+              <h3 className="font-serif text-xl lg:text-[22px] leading-snug">{it.t}</h3>
+              <p className="mt-2.5 text-[13px] text-muted leading-relaxed">{it.s}</p>
+              <div className="ribbed mt-5 group-hover:bg-accent" />
+            </div>
+          )}
+        </div>
+
+        {/* Block 3 — Preparatório CFP®: trilha individual + Consultora enabler */}
+        <div className="mb-12 lg:mb-14">
+          <div className="flex items-center gap-3 mb-6">
+            <span className="font-mono text-[11px] text-accent tracking-[0.22em]">O PREPARATÓRIO</span>
+            <span className="ribbed flex-1" />
+          </div>
+          <h3 className="font-serif text-3xl md:text-4xl lg:text-[44px] leading-tight max-w-3xl mb-2">
+            Uma trilha individual para chegar até a <span className="italic text-accent">prova</span> sem cair a produtividade.
+          </h3>
+          <p className="text-muted text-[14px] leading-relaxed max-w-2xl mb-10">
+            Plano construído sob medida com a Consultora Educacional XP — do diagnóstico à prova. Encaixa nos horários do aluno e protege a produtividade do escritório por desenho.
+          </p>
+
+          <div className="relative">
+            {/* Rail */}
+            <div className="hidden lg:block absolute top-[16px] left-[10%] right-[10%] h-px" style={{ background: "rgba(245,197,24,0.35)" }} />
+            {/* Diamond markers on rail */}
+            <div className="hidden lg:grid absolute top-[10px] left-0 right-0 grid-cols-5 pointer-events-none">
+              {trailSteps.map((_, i) =>
+              <div key={i} className="flex justify-center">
+                  <div className="w-3 h-3 bg-accent rotate-45" />
+                </div>
+              )}
+            </div>
+
+            {/* Steps */}
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-0 lg:pt-12 relative">
+              {trailSteps.map((st, i) =>
+              <div key={i} className={"flex flex-col px-0 lg:px-5 " + (i < trailSteps.length - 1 ? "lg:border-r border-line" : "")}>
+                  <div className="font-mono text-[11px] text-accent tracking-[0.22em] mb-3">ETAPA {st.n}</div>
+                  <div className="w-12 h-12 border border-accent text-accent flex items-center justify-center mb-5">
+                    <Icon name={st.ic} className="w-5 h-5" />
+                  </div>
+                  <div className="font-serif text-[22px] lg:text-[24px] leading-tight">{st.t}</div>
+                  <div className="text-[13px] text-muted mt-2 leading-relaxed">{st.s}</div>
+                </div>
+              )}
+            </div>
+
+            {/* Consultora enabler bar */}
+            <div className="mt-10 lg:mt-12 border border-accent bg-[color:var(--accent-soft)] relative">
+              {/* upward chevrons connecting to each step */}
+              <div className="hidden lg:grid absolute -top-2 left-0 right-0 grid-cols-5 pointer-events-none">
+                {trailSteps.map((_, i) =>
+                <div key={i} className="flex justify-center">
+                    <svg width="14" height="8" viewBox="0 0 14 8" fill="none">
+                      <path d="M7 0 L14 8 L0 8 Z" fill="var(--bg)" stroke="#F5C518" strokeWidth="1" />
+                    </svg>
+                  </div>
+                )}
+              </div>
+              <div className="p-6 lg:p-7 grid grid-cols-1 lg:grid-cols-[auto_1fr_auto] items-center gap-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-accent text-black flex items-center justify-center shrink-0">
+                    <Icon name="user-round-cog" className="w-5 h-5" strokeWidth={1.8} />
+                  </div>
+                  <div>
+                    <div className="font-mono text-[10px] text-accent tracking-[0.22em]">CONSULTORA EDUCACIONAL XP · ENABLER</div>
+                    <div className="font-serif text-[22px] lg:text-[26px] leading-tight mt-1">Presente em todas as etapas — do diagnóstico à prova.</div>
+                  </div>
+                </div>
+                <div className="hidden lg:block" />
+                <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-[12.5px] text-white/90 lg:max-w-md">
+                  <div className="flex items-center gap-2"><span className="w-1 h-1 bg-accent" /> Plano sob medida</div>
+                  <div className="flex items-center gap-2"><span className="w-1 h-1 bg-accent" /> Revisões periódicas</div>
+                  <div className="flex items-center gap-2"><span className="w-1 h-1 bg-accent" /> Replanejamento ágil</div>
+                  <div className="flex items-center gap-2"><span className="w-1 h-1 bg-accent" /> Suporte até a prova</div>
+                </div>
+              </div>
+              <div className="border-t border-[color:var(--accent-line)] px-6 lg:px-7 py-3 font-mono text-[10px] text-muted tracking-[0.18em] uppercase">
+                Não é avulso — a Consultora Educacional acompanha cada aluno que opta pelo CFP®.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Block 4 — Comunidade */}
+        <div id="comunidade">
+          <div className="flex items-center gap-3 mb-6">
+            <span className="font-mono text-[11px] text-accent tracking-[0.22em]">A COMUNIDADE VITALÍCIA</span>
+            <span className="ribbed flex-1" />
+          </div>
+          <h3 className="font-serif text-3xl md:text-4xl lg:text-[44px] leading-tight max-w-3xl mb-10">
+            O que está <span className="italic text-accent">reservado</span>  para os membros da comunidade de alumni
+          </h3>
+          <div className="grid lg:grid-cols-12 gap-10 items-start">
+            <div className="lg:col-span-4">
+              <NetworkVisual />
+            </div>
+            <div className="lg:col-span-4">
+              <div className="font-mono text-[11px] text-accent tracking-[0.22em] mb-4">QUEM ENTRA</div>
+              <ul className="grid grid-cols-1 gap-3">
+                {[
+                { ic: "check-circle-2", t: "Aprovação no CFP®" },
+                { ic: "sparkles", t: "Top da turma em desempenho na formação" },
+                { ic: "link", t: "Vínculo ativo com escritório credenciado XP" },
+                { ic: "bar-chart-3", t: "Métricas de captação e duration consistentes" }].
+                map((c, i) =>
+                <li key={i} className="flex items-center gap-3 border border-line bg-surface px-3 py-2.5">
+                    <Icon name={c.ic} className="w-4 h-4 text-accent" />
+                    <span className="text-[13px]">{c.t}</span>
+                  </li>
+                )}
+              </ul>
+            </div>
+            <div className="lg:col-span-4">
+              <div className="font-mono text-[11px] text-accent tracking-[0.22em] mb-4">O QUE ESTÁ RESERVADO</div>
+              <ul className="space-y-3">
+                {[
+                { t: "Encontros trimestrais presenciais", s: "+ meetups online entre as edições. Cadência fixa, pauta exclusiva." },
+                { t: "Estudos de caso de top performers", s: "Como crescem carteira, captam e retêm — com números reais." },
+                { t: "Acesso direto a sócios e líderes XP", s: "Rodadas fechadas com a liderança da rede." },
+                { t: "Convite prioritário a iniciativas XP", s: "Prévia de produtos, programas e oportunidades estratégicas." }].
+                map((it, i) =>
+                <li key={i} className="border border-line bg-surface p-3">
+                    <div className="flex items-start gap-3">
+                      <div className="font-mono text-[10px] text-accent tracking-[0.22em] pt-0.5">0{i + 1}</div>
+                      <div>
+                        <div className="text-[13px] font-medium">{it.t}</div>
+                        <div className="text-[12px] text-muted mt-0.5">{it.s}</div>
+                      </div>
+                    </div>
+                  </li>
+                )}
+              </ul>
+            </div>
+          </div>
+
+          {/* Closing scarcity line */}
+          <div className="mt-10 border border-accent bg-[color:var(--accent-soft)] p-6 lg:p-7 flex items-center gap-4">
+            <Icon name="lock" className="w-6 h-6 text-accent shrink-0" />
+            <div className="font-serif text-[20px] lg:text-[26px] leading-snug">
+              <span className="text-accent">O CFP® habilita o acesso a comunidade.</span>  A certificação é o gatilho que separa quem chega à elite do planejamento financeiro.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>);
+
+};
+
+
+/* ==================== SECTION 08 — CRONOGRAMA ==================== */
+const Section08 = () => {
+  const stops = [
+  { tag: "FINAL DE MAIO", t: "Abertura de inscrições", s: "Sócios de escritórios credenciados têm prioridade.", ic: "key-round" },
+  { tag: "MAI – JUL", t: "Fase 1+2 · Imersão · IA · Eventos", s: "Três dias em SP + IA contínua + Advisor Experience e ExpertXP.", ic: "flag" },
+  { tag: "A PARTIR DE AGO", t: "Fase 3 · CFP® com Consultoria Educacional XP", s: "O salto. Consultora dedicada do diagnóstico à prova.", ic: "award" }];
+
+  return (
+    <section className="border-b border-line">
+      <div className="max-w-[1280px] mx-auto px-6 lg:px-10 py-16 lg:py-24">
+        <SectionHead
+          index={8}
+          kicker="Cronograma"
+          title={<>Próximos <span className="italic">passos</span>.</>} />
+        
+        {/* horizontal timeline */}
+        <div className="relative">
+          <div className="absolute left-0 right-0 top-[34px] h-px bg-line-strong" style={{ background: "var(--line-strong)" }} />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {stops.map((s, i) =>
+            <div key={i} className="relative">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-3 h-3 bg-accent rotate-45 relative z-10" />
+                  <div className="font-mono text-[11px] text-accent tracking-[0.22em]">{s.tag}</div>
+                </div>
+                <div className="border border-line bg-surface p-5">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-mono text-[11px] text-muted tracking-[0.22em]">MARCO 0{i + 1}</span>
+                    <Icon name={s.ic} className="w-4 h-4 text-accent" />
+                  </div>
+                  <div className="font-serif text-xl leading-tight">{s.t}</div>
+                  <div className="text-[12.5px] text-muted mt-2">{s.s}</div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="mt-12 border border-line bg-surface p-6 lg:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+          <div className="max-w-2xl">
+            <div className="font-mono text-[11px] text-accent tracking-[0.22em] mb-2">VAGAS LIMITADAS</div>
+            <div className="font-serif text-2xl lg:text-3xl leading-tight">Sócios de escritórios credenciados têm prioridade. Manifeste seu interesse para garantir acesso na abertura das inscrições.</div>
+          </div>
+          <CTAButton size="lg" variant="primary">Tenho interesse</CTAButton>
+        </div>
+      </div>
+    </section>);
+
+};
+
+/* ==================== SECTION 09 — FAQ ==================== */
+const CompareTable = () => {
+  const rows = [
+  { c: "Conteúdo", o: "Genérico, vendas amplas", x: "Pilares específicos de assessoria: prospecção, captação, relacionamento, mindset" },
+  { c: "Professores", o: "Acadêmicos ou consultores genéricos", x: "Top performers da rede XP, vivência prática" },
+  { c: "Prática", o: "Apenas teoria em sala", x: "IA para simulações, análise de pitch, treino de objeções" },
+  { c: "Networking", o: "Limitado a colegas de turma", x: "Imersão SP + Advisor Experience + ExpertXP — encontro com os melhores" },
+  { c: "Trilha de evolução", o: "Nenhuma", x: "CFP® com Consultora Educacional + Comunidade vitalícia" }];
+
+  return (
+    <div className="mt-4 border border-line overflow-hidden">
+      <div className="grid grid-cols-[1.3fr_1fr_1.2fr] bg-surface-2">
+        <div className="px-4 py-3 font-mono text-[11px] text-muted tracking-[0.22em] uppercase border-r border-line">Critério</div>
+        <div className="px-4 py-3 font-mono text-[11px] text-muted tracking-[0.22em] uppercase border-r border-line">Treinamentos corporativos</div>
+        <div className="px-4 py-3 font-mono text-[11px] text-accent tracking-[0.22em] uppercase bg-[color:var(--accent-soft)]">Imersão de Alta Performance XP</div>
+      </div>
+      {rows.map((r, i) =>
+      <div key={i} className={"grid grid-cols-[1.3fr_1fr_1.2fr] " + (i < rows.length - 1 ? "border-b border-line" : "")}>
+          <div className="px-4 py-4 text-[13px] font-medium border-r border-line">{r.c}</div>
+          <div className="px-4 py-4 text-[13px] text-muted border-r border-line flex items-start gap-2">
+            <Icon name="x" className="w-4 h-4 text-dim mt-0.5 shrink-0" /><span>{r.o}</span>
+          </div>
+          <div className="px-4 py-4 text-[13px] bg-[color:var(--accent-soft)] flex items-start gap-2">
+            <Icon name="check" className="w-4 h-4 text-accent mt-0.5 shrink-0" /><span>{r.x}</span>
+          </div>
+        </div>
+      )}
+    </div>);
+
+};
+
+const FAQItem = ({ q, n, children, defaultOpen = false }) => {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div className="border-b border-line">
+      <button onClick={() => setOpen(!open)} className="w-full flex items-start gap-5 py-5 text-left">
+        <span className="font-mono text-[11px] text-accent tracking-[0.22em] pt-1 shrink-0">Q.{n}</span>
+        <span className="font-serif text-[20px] lg:text-[22px] leading-snug flex-1">{q}</span>
+        <span className={"text-muted transition-transform shrink-0 " + (open ? "rotate-45" : "")}>
+          <Icon name="plus" className="w-5 h-5" />
+        </span>
+      </button>
+      {open &&
+      <div className="pl-[58px] pr-2 pb-6 text-[14px] text-muted leading-relaxed">
+          {children}
+        </div>
+      }
+    </div>);
+
+};
+
+const Section09 = () =>
+<section id="faq" className="border-b border-line bg-[var(--bg-2)]">
+    <div className="max-w-[1280px] mx-auto px-6 lg:px-10 py-16 lg:py-24 grid lg:grid-cols-12 gap-10">
+      <div className="lg:col-span-4">
+        <SectionHead
+        index={9}
+        kicker="FAQ"
+        title={<>Perguntas <span className="italic">frequentes</span>.</>}
+        sub="As objeções mais comuns dos sócios — respondidas com objetividade." />
+      
+      </div>
+      <div className="lg:col-span-8">
+        <FAQItem n="01" q="Esta formação é para qual perfil de assessor?">
+          Para assessores em qualquer estágio. Iniciantes e intermédiarios encontram aqui o ponto de entrada certo — a imersão de 3 dias, a IA de prática e os eventos da rede aceleram a curva sem exigir pré-requisito técnico. Seniores em evolução podem ir direto à Fase 3 (CFP®); para esse perfil, recomendamos a LP da Formação CFP de Alta Performance.
+        </FAQItem>
+        <FAQItem n="02" q="Posso inscrever a mim mesmo, meus assessores, ou ambos?">
+          Sim, para os três cenários. O programa foi desenhado para sócios em carreira avançada — que também atuam como assessores — e para assessores indicados pelo escritório. No formulário de interesse, o sócio sinaliza para quem é a inscrição.
+        </FAQItem>
+        <FAQItem n="03" q="Como funciona o conteúdo online e a ferramenta de IA?">
+          O conteúdo online é assíncrono e fica disponível antes, durante e depois dos 3 dias presenciais. A IA permite que o assessor pratique atendimentos, peça análise dos próprios pitches e treine objeções na rotina — quantas vezes precisar, sem comprometer a produção.
+        </FAQItem>
+        <FAQItem n="04" q="Quem ministra a imersão de 3 dias?">
+          Profissionais com vivência prática — assessores e líderes de alta performance da rede XP, que trazem credibilidade e exemplos reais. Não professores de sala de aula.
+        </FAQItem>
+        <FAQItem n="05" defaultOpen q="Por que esta formação e não um treinamento corporativo qualquer?">
+          <p>Existe diferença material em cinco eixos. Em todos eles, a Imersão de Alta Performance entrega algo que um treinamento corporativo não oferece:</p>
+          <CompareTable />
+        </FAQItem>
+        <FAQItem n="06" q="Quando faz sentido fazer o CFP®?">
+          O CFP® é o destino natural. Não existe assessor de alta performance que não passe por ele em algum momento. A Imersão de Alta Performance é a porta de entrada da trilha; o CFP® é o salto. Quando o aluno estiver pronto, a Consultora Educacional XP dedicada acompanha o processo do diagnóstico à prova.
+        </FAQItem>
+        <FAQItem n="07" q="Como meus assessores entram na Comunidade exclusiva?">
+          A entrada requer aprovação no CFP®, melhor performance na turma, vínculo ativo na rede e indicadores consistentes. Sem CFP®, não há entrada — esse é o gatilho que separa quem chega à elite dos demais.
+        </FAQItem>
+        <FAQItem n="08" q="Já tenho CFP®, posso ser professor?">
+          Sim. As vagas de docentes não estão fechadas — temos um processo seletivo aberto, com vagas remuneradas, para profissionais CFP® que queiram ensinar na formação. Manifeste interesse no formulário abaixo e nossa equipe entrará em contato com os próximos passos.
+        </FAQItem>
+      </div>
+    </div>
+  </section>;
+
+
+/* ==================== SECTION 10 — FORM ==================== */
+const RadioCard = ({ name, value, label, checked, onChange }) =>
+<label className={"radio-card border border-line p-3 cursor-pointer flex items-center gap-3 transition-colors " + (checked ? "" : "hover:bg-white/5")}>
+    <input type="radio" name={name} value={value} checked={checked} onChange={onChange} className="accent-yellow-400" />
+    <span className="text-[13px]">{label}</span>
+  </label>;
+
+
+const Section10 = () => {
+  const [target, setTarget] = useState("mim");
+  const [professorInterest, setProfessorInterest] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  return (
+    <section id="interesse" className="border-b border-line">
+      <div className="max-w-[1280px] mx-auto px-6 lg:px-10 py-16 lg:py-24">
+        <div className="grid lg:grid-cols-12 gap-10 items-start">
+          <div className="lg:col-span-5">
+            <SectionHead
+              index={10}
+              kicker="Tenho interesse"
+              title={<>Acelere a <span className="italic text-accent">performance</span> dos seus assessores.</>}
+              sub="Vagas limitadas. Sócios de escritórios credenciados têm prioridade. Manifeste seu interesse e receba prioridade na abertura das inscrições." />
+            
+            <div className="grid grid-cols-3 gap-3 mt-6 max-w-md">
+              {["CFP®", "Planejar", "XP"].map((s) =>
+              <div key={s} className="border border-line bg-surface aspect-[5/2] flex items-center justify-center font-mono text-[12px] tracking-[0.2em] text-muted">{s}</div>
+              )}
+            </div>
+            <div className="mt-6 font-mono text-[10px] text-dim tracking-[0.18em] uppercase">Selos institucionais · Wireframe</div>
+          </div>
+
+          <div className="lg:col-span-7">
+            <form onSubmit={(e) => {e.preventDefault();setSubmitted(true);}} className="border border-line bg-surface p-6 lg:p-8">
+              {submitted ?
+              <div className="py-10 text-center">
+                  <div className="w-14 h-14 mx-auto bg-accent text-black flex items-center justify-center">
+                    <Icon name="check" className="w-6 h-6" strokeWidth={2} />
+                  </div>
+                  <div className="font-serif text-3xl mt-5">Interesse registrado.</div>
+                  <p className="text-muted text-[14px] mt-3 max-w-md mx-auto">Nossa equipe entrará em contato na abertura das inscrições. Sócios credenciados são contatados primeiro.</p>
+                </div> :
+
+              <>
+                  <div className="flex items-center justify-between mb-5">
+                    <span className="font-mono text-[11px] text-accent tracking-[0.22em]">FORMULÁRIO · REF/IAP-2026</span>
+                    <span className="font-mono text-[11px] text-muted tracking-[0.22em]">CAMPOS OBRIGATÓRIOS *</span>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {[
+                  { l: "Nome completo*", t: "text", p: "Como você assina" },
+                  { l: "E-mail corporativo*", t: "email", p: "voce@escritorio.com.br" },
+                  { l: "Telefone*", t: "tel", p: "(00) 00000-0000" },
+                  { l: "Escritório credenciado XP*", t: "text", p: "Razão social do escritório" }].
+                  map((f, i) =>
+                  <label key={i} className="block">
+                        <span className="font-mono text-[11px] text-muted tracking-[0.18em] uppercase">{f.l}</span>
+                        <input type={f.t} placeholder={f.p} className="mt-2 w-full bg-transparent border border-line focus:border-accent outline-none px-3 py-2.5 text-[14px] placeholder:text-dim" />
+                      </label>
+                  )}
+                    <label className="block md:col-span-2">
+                      <span className="font-mono text-[11px] text-muted tracking-[0.18em] uppercase">Código de assessor XP <span className="normal-case text-dim">(opcional · usado para segmentação)</span></span>
+                      <input type="text" placeholder="A0000000" className="mt-2 w-full bg-transparent border border-line focus:border-accent outline-none px-3 py-2.5 text-[14px] font-mono placeholder:text-dim" />
+                    </label>
+                  </div>
+
+                  <div className="mt-6">
+                    <span className="font-mono text-[11px] text-muted tracking-[0.18em] uppercase">Inscrição para*</span>
+                    <div className="mt-2 grid grid-cols-1 md:grid-cols-3 gap-3">
+                      <RadioCard name="target" value="mim" label="Mim mesmo" checked={target === "mim"} onChange={() => setTarget("mim")} />
+                      <RadioCard name="target" value="assessores" label="Meus assessores" checked={target === "assessores"} onChange={() => setTarget("assessores")} />
+                      <RadioCard name="target" value="ambos" label="Ambos" checked={target === "ambos"} onChange={() => setTarget("ambos")} />
+                    </div>
+                  </div>
+
+                  {/* Professor interest toggle */}
+                  <label className={"mt-5 block border cursor-pointer transition-colors " + (professorInterest ? "border-accent bg-[color:var(--accent-soft)]" : "border-line hover:bg-white/5")}>
+                    <div className="p-4 flex items-start gap-3">
+                      <input type="checkbox" checked={professorInterest} onChange={(e) => setProfessorInterest(e.target.checked)} className="mt-1 accent-yellow-400" />
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="font-mono text-[10px] text-accent tracking-[0.22em]">CORPO DOCENTE</span>
+                          <span className="font-mono text-[10px] text-dim tracking-[0.18em]">VAGAS REMUNERADAS</span>
+                        </div>
+                        <div className="font-serif text-[17px] leading-tight mt-1.5">Já tenho CFP® e quero ser professor.</div>
+                        <div className="text-[12px] text-muted mt-1 leading-snug">Marque para entrar no processo seletivo de docentes. Avaliamos perfil e ajustamos próximos passos no contato.</div>
+                      </div>
+                    </div>
+                  </label>
+
+                  <label className="flex items-start gap-3 mt-6 text-[12.5px] text-muted">
+                    <input type="checkbox" defaultChecked className="mt-1 accent-yellow-400" />
+                    <span>Aceito receber comunicações sobre a formação e iniciativas relacionadas.</span>
+                  </label>
+
+                  <button type="submit" className="mt-7 w-full bg-accent text-black font-medium py-4 hover:bg-yellow-300 inline-flex items-center justify-center gap-2">
+                    Reservar   <Icon name="arrow-right" className="w-4 h-4" />
+                  </button>
+                </>
+              }
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>);
+
+};
+
+/* ==================== FOOTER ==================== */
+const Footer = () =>
+<footer className="bg-[var(--bg)]">
+    <div className="max-w-[1280px] mx-auto px-6 lg:px-10 py-10 grid md:grid-cols-3 gap-6 items-start">
+      <div className="flex items-center gap-3">
+        <div className="w-7 h-7 bg-accent text-black font-bold font-serif text-lg flex items-center justify-center">XP</div>
+        <div className="font-mono text-[11px] text-muted tracking-[0.22em] uppercase">Imersão Alta Performance</div>
+      </div>
+      <div className="text-[12px] text-muted leading-relaxed">
+        Dados pilotados com alunos do programa piloto. Multiplicadores de 6× (mapeamento) e 4,5× (conversão) referem-se à comparação entre alunos do piloto e base de profissionais do mercado.
+      </div>
+      <div className="text-[12px] text-muted md:text-right">
+        <div>CFP® é marca registrada da Planejar.</div>
+        <div className="mt-2 font-mono text-[10px] tracking-[0.22em] uppercase text-dim">© 2026 · Wireframe LP · v1.0</div>
+      </div>
+    </div>
+  </footer>;
+
+
+/* ==================== APP ==================== */
+const App = () => {
+  return (
+    <main className="min-h-screen">
+      <TopBar />
+      <Hero />
+      <Section02 />
+      <Section03 />
+      <Section04 />
+      <Section06 />
+      <Interlude />
+      <Section07 />
+      <Section08 />
+      <Section09 />
+      <Section10 />
+      <Footer />
+    </main>);
+
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+
+</script>
+
+
+</body></html>
