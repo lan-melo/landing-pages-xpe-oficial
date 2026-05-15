@@ -81,7 +81,10 @@
     line-height:0.88;
     font-weight:400;
   }
-  .launch-headline > span{ display:block; white-space:nowrap; }
+  .launch-headline > span{ display:block; white-space:normal; }
+  @media (min-width: 640px){
+    .launch-headline > span{ white-space:nowrap; }
+  }
   .launch-headline em{ font-style: italic; }
   /* heavier grid on the launch hero */
   .launch-grid{
@@ -288,7 +291,7 @@ const LaunchHero = () =>
       </div>
 
       <div>
-        <h1 className="launch-headline text-[44px] sm:text-[64px] lg:text-[104px] xl:text-[120px]">
+        <h1 className="launch-headline text-[36px] sm:text-[64px] lg:text-[104px] xl:text-[120px]">
           <span className="text-white">O assessor do futuro</span>
           <span className="text-accent">começa <em>aqui</em>.</span>
         </h1>
