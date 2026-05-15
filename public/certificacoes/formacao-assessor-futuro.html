@@ -1,40 +1,24 @@
-<!DOCTYPE html>
-<html lang="pt-BR"><head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="icon" type="image/png" href="/favicon.png">
-<title>Imersão de Alta Performance — XP Educação</title>
-
-<!-- Microsoft Clarity -->
-<script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "vwstca1hw0");
-</script>
-
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-PDVDTZNX');</script>
-<!-- End Google Tag Manager -->
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Formação Assessor do Futuro — Wireframe LP</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <style>
   :root{
-    --bg: #0A0A0F;
-    --bg-2: #101018;
-    --surface: #14141C;
-    --surface-2: #1B1B26;
+    /* Black tones normalized to match the XP Educação logo background (pure neutral black) */
+    --bg: #0A0A0A;
+    --bg-2: #121212;
+    --surface: #181818;
+    --surface-2: #1F1F1F;
     --line: rgba(255,255,255,0.09);
     --line-strong: rgba(255,255,255,0.18);
     --text: #F4F4F0;
@@ -87,82 +71,60 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   /* underline highlight for headline accent words */
   .ink{ background-image: linear-gradient(transparent 70%, rgba(245,197,24,0.35) 70%); padding: 0 .08em; }
 
-  /* smooth anchor scroll */
-  html { scroll-behavior: smooth; }
-
-  /* ===== Reveal on scroll ===== */
-  @media (prefers-reduced-motion: no-preference) {
-    [data-reveal]{
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity .85s cubic-bezier(.2,.65,.25,1), transform .85s cubic-bezier(.2,.65,.25,1);
-      will-change: opacity, transform;
-    }
-    [data-reveal].is-visible{ opacity: 1; transform: none; }
-
-    [data-reveal-group] > * {
-      opacity: 0;
-      transform: translateY(22px);
-      transition: opacity .7s cubic-bezier(.2,.65,.25,1), transform .7s cubic-bezier(.2,.65,.25,1);
-    }
-    [data-reveal-group].is-visible > * { opacity: 1; transform: none; }
-    [data-reveal-group].is-visible > *:nth-child(1){ transition-delay: 0ms; }
-    [data-reveal-group].is-visible > *:nth-child(2){ transition-delay: 90ms; }
-    [data-reveal-group].is-visible > *:nth-child(3){ transition-delay: 180ms; }
-    [data-reveal-group].is-visible > *:nth-child(4){ transition-delay: 270ms; }
-    [data-reveal-group].is-visible > *:nth-child(5){ transition-delay: 360ms; }
-    [data-reveal-group].is-visible > *:nth-child(6){ transition-delay: 450ms; }
-    [data-reveal-group].is-visible > *:nth-child(7){ transition-delay: 540ms; }
-    [data-reveal-group].is-visible > *:nth-child(8){ transition-delay: 630ms; }
+  /* ===== Launch hero: bigger, condensed feel via serif + tight tracking ===== */
+  .launch-headline{
+    font-family:'Instrument Serif',ui-serif,Georgia,serif;
+    text-transform:uppercase;
+    letter-spacing:-0.025em;
+    line-height:1.0;
+    font-weight:400;
   }
-
-  /* ===== Interaction effects ===== */
-  .lift{ transition: transform .28s ease, border-color .28s ease, background-color .28s ease, box-shadow .28s ease; }
-  .lift:hover{ transform: translateY(-3px); border-color: var(--accent-line); box-shadow: 0 12px 28px rgba(0,0,0,.35); }
-
-  .btn-cta{ position: relative; transition: transform .22s ease, box-shadow .22s ease, background-color .22s ease; }
-  .btn-cta:hover{ transform: translateY(-1px); box-shadow: 0 10px 24px rgba(245,197,24,.22); }
-  .btn-cta:active{ transform: translateY(0); }
-  .btn-cta svg, .btn-cta .lucide{ transition: transform .25s ease; }
-  .btn-cta:hover svg, .btn-cta:hover .lucide{ transform: translateX(3px); }
-
-  .nav-link{ position: relative; }
-  .nav-link::after{
-    content:""; position:absolute; left:0; bottom:-5px; height:1px; width:100%;
-    background: var(--accent); transform: scaleX(0); transform-origin: left;
-    transition: transform .3s ease;
+  .launch-headline > span{ display:block; white-space:nowrap; }
+  .launch-headline em{ font-style: italic; }
+  /* heavier grid on the launch hero */
+  .launch-grid{
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size: 80px 80px;
   }
-  .nav-link:hover::after{ transform: scaleX(1); }
-
-  .tag-pill{ transition: border-color .25s ease, color .25s ease, background-color .25s ease, transform .25s ease; }
-  .tag-pill:hover{ border-color: var(--accent-line); color: #fff; transform: translateY(-1px); }
-
-  /* Subtle ring animation on CFP visual */
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
-  @media (prefers-reduced-motion: no-preference) {
-    @keyframes ring-pulse { 0%,100%{ stroke-opacity:.20 } 50%{ stroke-opacity:.55 } }
-    .cfp-ring-a{ animation: ring-pulse 6s ease-in-out infinite; }
-    .cfp-ring-b{ animation: ring-pulse 6s ease-in-out infinite; animation-delay: 1.5s; }
-    .cfp-ring-c{ animation: ring-pulse 6s ease-in-out infinite; animation-delay: 3s; }
-    @keyframes float-soft { 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(-6px) } }
-    .float-soft{ animation: float-soft 7s ease-in-out infinite; }
-    .float-soft.delay{ animation-delay: 2.5s; }
+  /* faint diagonal in the corner of equation blocks */
+  .eq-hatch{
+    background-image: repeating-linear-gradient(135deg, rgba(255,255,255,0.04) 0 1px, transparent 1px 9px);
   }
-
-  /* Prevent horizontal overflow on small screens */
-  body { overflow-x: hidden; }
 </style>
-
+<template id="__bundler_thumbnail" data-bg-color="#0A0A0A">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#0A0A0A" />
+    <g transform="translate(420 220)">
+      <rect x="0" y="0" width="360" height="360" fill="#F5C518" />
+      <text x="180" y="245" text-anchor="middle" font-family="Georgia, serif" font-size="220" font-weight="700" fill="#0A0A0F">XP</text>
+    </g>
+    <text x="600" y="660" text-anchor="middle" font-family="Georgia, serif" font-size="40" fill="#F4F4F0">Imersão Alta Performance</text>
+    <text x="600" y="700" text-anchor="middle" font-family="Menlo, monospace" font-size="18" letter-spacing="6" fill="rgba(244,244,240,0.45)">CARREGANDO</text>
+  </svg>
+</template>
 </head>
 <body>
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PDVDTZNX"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-
 <div id="root"></div>
 
 <script type="text/babel" data-presets="env,react">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -207,7 +169,7 @@ const Tag = ({ children, tone = "default", className = "" }) => {
 };
 
 const SectionHead = ({ index, kicker, title, sub, alignLeft = true }) =>
-<div data-reveal className={"mb-10 lg:mb-14 " + (alignLeft ? "" : "text-center")}>
+<div className={"mb-10 lg:mb-14 " + (alignLeft ? "" : "text-center")}>
     <div className={"flex items-center gap-3 mb-5 " + (alignLeft ? "" : "justify-center")}>
       <span className="font-mono text-[11px] text-accent tracking-[0.22em]">§{String(index).padStart(2, '0')}</span>
       <span className="ribbed flex-1 max-w-[120px]" />
@@ -220,99 +182,215 @@ const SectionHead = ({ index, kicker, title, sub, alignLeft = true }) =>
   </div>;
 
 
-const CTAButton = ({ children, variant = "primary", size = "md", className = "", icon = "arrow-right", onClick, href = "#interesse" }) => {
+const CTAButton = ({ children, variant = "primary", size = "md", className = "", icon = "arrow-right" }) => {
   const base = "inline-flex items-center gap-2 font-medium transition-colors";
   const sizes = { md: "px-5 py-3 text-sm", lg: "px-6 py-3.5 text-[15px]" };
   const variants = {
-    primary: "bg-accent text-black hover:bg-yellow-300 btn-cta",
+    primary: "bg-accent text-black hover:bg-yellow-300",
     ghost: "border border-line-strong text-white hover:bg-white/5"
   };
-  const inner = (
-    <>
+  return (
+    <a href="#interesse" className={`${base} ${sizes[size]} ${variants[variant]} ${className}`}>
       <span>{children}</span>
       {icon && <Icon name={icon} className="w-4 h-4" />}
-    </>);
-
-  if (onClick) {
-    return (
-      <button type="button" onClick={onClick} className={`${base} ${sizes[size]} ${variants[variant]} ${className}`}>
-        {inner}
-      </button>);
-  }
-  return (
-    <a href={href} className={`${base} ${sizes[size]} ${variants[variant]} ${className}`}>
-      {inner}
     </a>);
+
 };
 
-const openACForm = () => window.dispatchEvent(new CustomEvent("open-ac-form"));
+/* ==================== LAUNCH HERO (Formação Assessor do Futuro) ==================== */
+const smoothScrollTo = (id) => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const y = el.getBoundingClientRect().top + window.scrollY - 56; // offset for sticky bar
+  window.scrollTo({ top: y, behavior: 'smooth' });
+};
 
-/* ==================== ACTIVE CAMPAIGN MODAL ==================== */
-const ACFormModal = () => {
-  const [open, setOpen] = useState(false);
-  const containerRef = useRef(null);
-  const loadedRef = useRef(false);
+const LaunchHero = () =>
+<section className="relative border-b border-line bg-[var(--bg)] overflow-hidden">
+    {/* heavy grid bg */}
+    <div className="absolute inset-0 launch-grid opacity-50 pointer-events-none" />
+    {/* subtle accent wash bottom-right */}
+    <div className="absolute -right-40 -bottom-40 w-[640px] h-[640px] rounded-full pointer-events-none"
+  style={{ background: "radial-gradient(circle, rgba(245,197,24,0.10) 0%, rgba(245,197,24,0) 60%)" }} />
 
-  useEffect(() => {
-    const onOpen = () => setOpen(true);
-    const onKey = (e) => { if (e.key === "Escape") setOpen(false); };
-    window.addEventListener("open-ac-form", onOpen);
-    window.addEventListener("keydown", onKey);
-    return () => {
-      window.removeEventListener("open-ac-form", onOpen);
-      window.removeEventListener("keydown", onKey);
-    };
-  }, []);
+    <div className="max-w-[1280px] mx-auto px-6 lg:px-10 pt-14 lg:pt-24 pb-16 lg:pb-24 relative">
+      {/* eyebrow */}
+      <div className="mb-10 lg:mb-14">
+        <span className="font-mono text-[11px] text-accent tracking-[0.28em] uppercase">Lançamento exclusivo B2B Experience</span>
+      </div>
 
-  useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
-    if (open && containerRef.current && !loadedRef.current) {
-      const formDiv = document.createElement("div");
-      formDiv.className = "_form_691";
-      containerRef.current.appendChild(formDiv);
-      const script = document.createElement("script");
-      script.src = "https://email.xpeducacao.com.br/f/embed.php?id=691";
-      script.charset = "utf-8";
-      script.async = true;
-      containerRef.current.appendChild(script);
-      loadedRef.current = true;
-    }
-  }, [open]);
+      <div>
+        <h1 className="launch-headline text-[44px] sm:text-[64px] lg:text-[104px] xl:text-[120px]">
+          <span className="text-white">O assessor do futuro</span>
+          <span className="text-accent">começa <em>aqui</em>.</span>
+        </h1>
+      </div>
 
-  return (
-    <div
-      className={"fixed inset-0 z-[100] transition-opacity " + (open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none")}
-      aria-hidden={!open}>
-      <div className="absolute inset-0 bg-black/75 backdrop-blur-sm" onClick={() => setOpen(false)} />
-      <div className="relative h-full w-full flex items-center justify-center p-4">
-        <div className="relative bg-white text-black w-full max-w-[640px] max-h-[92vh] overflow-auto shadow-2xl rounded-md">
-          <button
-            type="button"
-            onClick={() => setOpen(false)}
-            aria-label="Fechar"
-            className="absolute top-3 right-3 w-9 h-9 inline-flex items-center justify-center rounded hover:bg-black/10 z-10">
-            <Icon name="x" className="w-5 h-5" />
-          </button>
-          <div ref={containerRef} className="ac-form-container p-6 pt-12" />
+      {/* subheadline + cta */}
+      <div className="mt-12 lg:mt-16 max-w-3xl">
+        <p className="text-[16px] lg:text-[18px] leading-relaxed" style={{ color: "rgba(244,244,240,0.78)" }}>
+          Nos últimos anos, formamos os melhores assessores do mercado financeiro brasileiro —  <span className="text-white font-medium">+10.000 pessoas impactadas</span>, da certificação e onboarding ao topo da rede. Agora chegou o próximo passo: unimos o método do   <span className="text-white">XP Academy</span>      à plataforma      <span className="text-white">XP Educação</span>   para formar, em escala, o assessor que o futuro vai exigir.
+        </p>
+
+        <div className="mt-9">
+          <a href="#equacao"
+        onClick={(e) => {e.preventDefault();smoothScrollTo('equacao');}}
+        className="inline-flex items-center gap-2 bg-accent text-black font-medium px-7 py-4 text-[15px] uppercase tracking-[0.14em] hover:bg-yellow-300 transition-colors">
+            <span>QUERO CONHECER</span>
+            <Icon name="arrow-down" className="w-4 h-4" />
+          </a>
         </div>
       </div>
-    </div>);
-};
+    </div>
+</section>;
+
+
+/* ==================== TRANSITION BAND — A + B = C ==================== */
+const InputBlock = ({ tag, line, segments, footnote }) =>
+<div className="relative border border-line bg-surface p-6 lg:p-7 flex flex-col h-full">
+    <div className="absolute inset-0 eq-hatch pointer-events-none" />
+    <div className="relative flex items-center justify-between mb-5">
+      <span className="font-mono text-[10px] tracking-[0.24em] uppercase text-accent">{tag}</span>
+      <span className="w-1.5 h-1.5 bg-accent rotate-45" />
+    </div>
+    <h3 className="relative font-serif text-[22px] lg:text-[26px] leading-[1.15] mb-5">
+      {line}
+    </h3>
+    <div className="relative ribbed mb-5" />
+    <ul className="relative space-y-4">
+      {segments.map((s, i) =>
+    <li key={i} className="text-[13px] leading-snug">
+          {s.label ?
+      <div className="flex flex-col gap-1.5">
+                <span className="inline-flex items-center gap-2">
+                  <span className="w-1 h-1 bg-accent shrink-0" />
+                  <span className="font-mono text-[10px] text-accent tracking-[0.22em] uppercase">{s.label}</span>
+                </span>
+                <span className="block" style={{ color: "rgba(244,244,240,0.82)" }}>{s.text}</span>
+              </div> :
+      <div className="flex gap-3">
+                <span className="text-accent shrink-0">▸</span>
+                <span style={{ color: "rgba(244,244,240,0.78)" }}>{s.text}</span>
+              </div>
+      }
+        </li>
+    )}
+    </ul>
+    {footnote &&
+  <div className="relative mt-auto pt-10">
+        <div className="pt-5 border-t border-line font-mono text-[10px] text-dim tracking-[0.18em] uppercase leading-relaxed">
+          {footnote}
+        </div>
+      </div>
+  }
+</div>;
+
+const Operator = ({ symbol }) =>
+<div className="flex lg:flex-col items-center justify-center py-2 lg:py-0 select-none">
+    <div className="font-serif text-accent text-[88px] lg:text-[120px] leading-none tracking-[-0.04em]">{symbol}</div>
+</div>;
+
+const ProductBlock = () =>
+<div className="relative border border-accent bg-[color:var(--accent-soft)] p-7 lg:p-9 flex flex-col h-full overflow-hidden">
+    {/* corner tickmarks */}
+    {["top-2 left-2", "top-2 right-2", "bottom-2 left-2", "bottom-2 right-2"].map((p) =>
+  <span key={p} className={"absolute " + p + " font-mono text-[10px] text-accent/60"}>+</span>
+  )}
+    {/* accent wash */}
+    <div className="absolute -right-24 -bottom-24 w-[320px] h-[320px] rounded-full pointer-events-none"
+  style={{ background: "radial-gradient(circle, rgba(245,197,24,0.18) 0%, rgba(245,197,24,0) 65%)" }} />
+
+    <div className="relative flex items-center justify-between mb-5">
+      <span className="font-mono text-[10px] tracking-[0.24em] uppercase text-accent">· LANÇAMENTO 2026</span>
+      <span className="w-2 h-2 bg-accent rotate-45" />
+    </div>
+
+    <h3 className="relative font-serif text-[34px] lg:text-[44px] xl:text-[48px] leading-[1.02] tracking-[-0.01em] mb-5">
+      Formação <span className="italic text-accent">Assessor do Futuro</span>.
+    </h3>
+
+    <div className="relative ribbed mb-5" style={{ backgroundImage: "repeating-linear-gradient(to right, rgba(245,197,24,0.45) 0 1px, transparent 1px 6px)" }} />
+
+    <ul className="relative space-y-3 mb-7">
+      {[
+    { n: "01", t: "Imersão e Prática", s: "3 dias presenciais em SP, conteúdo online e IA de prática contínua." },
+    { n: "02", t: "Conexão com a Rede", s: "Advisor Experience e ExpertXP — os eventos dos melhores da rede." },
+    { n: "03", t: "Certificação CFP® + Comunidade", s: "O salto. Consultora dedicada e acesso vitalício à elite do planejamento." }].
+    map((it, i) =>
+    <li key={i} className="flex gap-3">
+          <span className="font-mono text-[10px] text-accent tracking-[0.22em] uppercase shrink-0 pt-[3px]">{it.n}</span>
+          <div className="min-w-0">
+            <div className="text-[14px] font-medium leading-tight" style={{ color: "rgba(244,244,240,0.95)" }}>{it.t}</div>
+            <div className="text-[12.5px] leading-snug mt-1" style={{ color: "rgba(244,244,240,0.72)" }}>{it.s}</div>
+          </div>
+        </li>
+    )}
+    </ul>
+
+    <a href="#lp-original"
+  onClick={(e) => {e.preventDefault();smoothScrollTo('lp-original');}}
+  className="relative mt-auto inline-flex items-center justify-between bg-accent text-black font-medium px-5 py-3.5 text-[13px] uppercase tracking-[0.18em] hover:bg-yellow-300 transition-colors group">
+      <span>Conheça o programa</span>
+      <Icon name="arrow-down" className="w-4 h-4" />
+    </a>
+</div>;
+
+const TransitionBand = () =>
+<section id="equacao" className="relative border-b border-line bg-[var(--bg-2)]">
+    <div className="max-w-[1280px] mx-auto px-6 lg:px-10 py-14 lg:py-20">
+      {/* short framing */}
+      <h2 className="font-serif text-3xl md:text-4xl lg:text-[44px] leading-[1.05] tracking-[-0.01em] max-w-3xl mb-10 lg:mb-12">
+        A combinação que   <span className="italic text-accent"> só a XP tem</span>
+      </h2>
+
+      {/* A + B = C equation — A and B equal, C highlighted/larger */}
+      <div className="grid lg:grid-cols-[1fr_auto_1fr_auto_1.35fr] gap-5 lg:gap-4 items-stretch">
+        <InputBlock
+        tag="XP Academy"
+        line={<>Expertise em <span className="italic">produtividade comercial</span>.</>}
+        segments={[
+        { label: "Foundation", text: "Onboarding e Lab. Alta Performance — base da carreira" },
+        { label: "Performance", text: "Aceleradora Comercial e Rota Top 100 — captação no topo" },
+        { label: "Elite", text: "Advisor Experience, Consultor 3.0, Rumo ao Private, Executive Club" }]
+        } />
+      
+      
+
+        <Operator symbol="+" />
+
+        <InputBlock
+        tag="XP Educação"
+        line={<>A edtech que forma o <span className="italic">mercado financeiro</span>.</>}
+        segments={[
+        { label: "Plataforma", text: "+20.000 alunos ativos em estrutura digital escalável" },
+        { label: "Método", text: "Cursos preparatórios ANCORD, ANBIMA e CFP® com professores de ponta" },
+        { label: "Qualidade", text: "Educação certificada, entregue com consistência em escala" }]
+        } />
+      
+      
+
+        <Operator symbol="=" />
+
+        <ProductBlock />
+      </div>
+    </div>
+</section>;
+
 
 /* ==================== TOP BAR ==================== */
 const TopBar = () =>
 <div className="border-b border-line sticky top-0 z-40 backdrop-blur bg-[var(--bg)]/85">
     <div className="max-w-[1280px] mx-auto px-6 lg:px-10 h-14 flex items-center justify-between">
       <div className="flex items-center gap-3">
-        <img src="/logo-cfp.svg" alt="CFP®" className="h-6 w-auto opacity-90" />
+        <img src="assets/xp-educacao-logo.png" alt="XP Educação" className="h-7 w-auto block" />
       </div>
       <nav className="hidden md:flex items-center gap-6 text-[13px] text-muted">
-        <a className="nav-link hover:text-white" href="#resultados">Resultados</a>
-        <a className="nav-link hover:text-white" href="#jornada">Jornada</a>
-        <a className="nav-link hover:text-white" href="#imersao">Imersão</a>
-        <a className="nav-link hover:text-white" href="#cfp">CFP®</a>
-        <a className="nav-link hover:text-white" href="#comunidade">Comunidade</a>
-        <a className="nav-link hover:text-white" href="#faq">FAQ</a>
+        <a className="hover:text-white" href="#resultados">Resultados</a>
+        <a className="hover:text-white" href="#jornada">Jornada</a>
+        <a className="hover:text-white" href="#imersao">Imersão</a>
+        <a className="hover:text-white" href="#cfp">CFP®</a>
+        <a className="hover:text-white" href="#comunidade">Comunidade</a>
+        <a className="hover:text-white" href="#faq">FAQ</a>
       </nav>
       <CTAButton size="md" icon={null}>Tenho interesse</CTAButton>
     </div>
@@ -321,66 +399,43 @@ const TopBar = () =>
 
 /* ==================== SECTION 01 — HERO ==================== */
 const HeroVisual = () =>
-<div className="relative aspect-[5/6] lg:aspect-auto lg:h-[560px] border border-line bg-surface overflow-hidden">
-    {/* hatched bg */}
-    <div className="absolute inset-0 hatch opacity-60" />
+<div className="relative lg:h-[560px] border border-line bg-surface overflow-hidden flex flex-col">
     {/* corner tickmarks */}
     {["top-3 left-3", "top-3 right-3", "bottom-3 left-3", "bottom-3 right-3"].map((p) =>
-  <span key={p} className={`absolute ${p} font-mono text-[10px] text-dim`}>+</span>
+  <span key={p} className={`absolute ${p} font-mono text-[10px] text-dim z-10`}>+</span>
   )}
-    {/* tag on top */}
-    <div className="absolute top-4 left-4 flex items-center gap-2">
-      <Tag>Programa piloto · Cohort 2026</Tag>
-      <Tag tone="accent">Pré-lançamento</Tag>
+    {/* exhibit header */}
+    <div className="flex items-center justify-between px-5 py-3 border-b border-line bg-[var(--surface-2)]">
+      <span className="font-mono text-[10px] tracking-[0.22em] text-accent">EXHIBIT · PROGRAMA PILOTO</span>
+      <span className="font-mono text-[10px] tracking-[0.22em] text-dim hidden sm:inline">PILOTO ÷ CONTROLE</span>
     </div>
-    {/* central composition: stylized ascension chart */}
-    <svg viewBox="0 0 500 600" className="absolute inset-0 w-full h-full">
-      <defs>
-        <pattern id="dotgrid" width="14" height="14" patternUnits="userSpaceOnUse">
-          <circle cx="1" cy="1" r="0.8" fill="rgba(255,255,255,0.18)" />
-        </pattern>
-      </defs>
-      <rect width="500" height="600" fill="url(#dotgrid)" opacity="0.5" />
-      {/* horizontal axis */}
-      <line x1="40" y1="500" x2="460" y2="500" stroke="rgba(255,255,255,0.25)" strokeDasharray="2 4" />
-      <line x1="40" y1="500" x2="40" y2="80" stroke="rgba(255,255,255,0.25)" strokeDasharray="2 4" />
-      {/* baseline grey bars (low performers) */}
-      {[80, 120, 160, 200, 240, 280, 320].map((x, i) => {
-      const h = 30 + i * 4;
-      return <rect key={i} x={x} y={500 - h} width="22" height={h} fill="rgba(255,255,255,0.16)" />;
-    })}
-      {/* yellow performance bars rising sharply */}
-      {[100, 160, 220, 280, 340, 400].map((x, i) => {
-      const h = 60 + Math.pow(i, 1.7) * 18;
-      return <rect key={i} x={x} y={500 - h} width="22" height={h} fill="#F5C518" opacity={0.45 + i * 0.1} />;
-    })}
-      {/* trend curve */}
-      <path d="M 50,470 C 130,460 180,420 240,340 C 300,260 360,180 460,110" stroke="#F5C518" strokeWidth="2" fill="none" />
-      <circle cx="460" cy="110" r="7" fill="#F5C518" />
-      <circle cx="460" cy="110" r="14" fill="none" stroke="#F5C518" strokeOpacity="0.35" />
-      {/* annotations */}
-      <g fontFamily="Geist Mono" fontSize="10" fill="rgba(255,255,255,0.7)">
-        <text x="50" y="540">GRUPO CONTROLE</text>
-        <text x="280" y="540" fill="#F5C518">GRUPO DA TURMA PILOTO</text>
-      </g>
-      <g fontFamily="Geist Mono" fontSize="9" fill="rgba(255,255,255,0.45)">
-        <text x="48" y="92">PRODUTIVIDADE</text>
-      </g>
-      {/* multiplier callouts — above the curve */}
-      <g>
-        <text x="206" y="306" fontFamily="Geist Mono" fontSize="9" fill="rgba(255,255,255,0.7)">MAPEAMENTO</text>
-        <text x="206" y="336" fontFamily="Instrument Serif" fontSize="26" fill="#F5C518">6×</text>
-        <line x1="200" y1="346" x2="200" y2="378" stroke="#F5C518" strokeOpacity="0.55" />
-
-        <text x="346" y="140" fontFamily="Geist Mono" fontSize="9" fill="rgba(255,255,255,0.7)">CONVERSÃO</text>
-        <text x="346" y="170" fontFamily="Instrument Serif" fontSize="26" fill="#F5C518">4.5×</text>
-        <line x1="340" y1="180" x2="340" y2="218" stroke="#F5C518" strokeOpacity="0.55" />
-      </g>
-    </svg>
-    {/* bottom meta */}
-    <div className="absolute bottom-3 left-4 right-4 flex items-end justify-between">
-      <div className="font-mono text-[10px] text-dim">Fig. 01 · Tese de elevação técnica do escritório</div>
-      <div className="font-mono text-[10px] text-dim">N=PILOTO XP</div>
+    {/* three indicator rows */}
+    <div className="flex-1 flex flex-col">
+      {[
+    { n: "01", name: "Mapeamento", mult: "6×", pilotoW: 100, controlW: 17 },
+    { n: "02", name: "Conversão", mult: "4,5×", pilotoW: 66, controlW: 15 },
+    { n: "03", name: "Captação", mult: "+36%", pilotoW: 56, controlW: 41 }].
+    map((r, i, arr) =>
+    <div key={i} className={"px-5 lg:px-6 py-5 lg:py-7 flex-1 flex flex-col justify-center " + (i < arr.length - 1 ? "border-b border-line" : "")}>
+          <div className="flex items-baseline gap-3 mb-3">
+            <span className="font-mono text-[11px] text-dim tracking-[0.22em]">{r.n}</span>
+            <span className="font-serif text-[20px] lg:text-[22px] leading-tight flex-1">{r.name}</span>
+            <span className="font-serif text-[44px] lg:text-[56px] text-accent leading-none tracking-[-0.02em]">{r.mult}</span>
+          </div>
+          <div className="space-y-2">
+            <div className="h-2 bg-white/30" style={{ width: r.controlW + "%" }} />
+            <div className="h-2 bg-accent" style={{ width: r.pilotoW + "%" }} />
+          </div>
+        </div>
+    )}
+    </div>
+    {/* legend footer */}
+    <div className="border-t border-line px-5 py-3 flex items-center justify-between gap-4">
+      <div className="flex items-center gap-4 font-mono text-[10px] tracking-[0.18em] uppercase">
+        <span className="flex items-center gap-2 text-muted"><span className="w-3 h-1 bg-white/30" /> Controle</span>
+        <span className="flex items-center gap-2 text-accent"><span className="w-3 h-1 bg-accent" /> Piloto</span>
+      </div>
+      <span className="font-mono text-[10px] text-dim tracking-[0.18em] uppercase">Fig. 01</span>
     </div>
   </div>;
 
@@ -398,10 +453,10 @@ const HeroSeals = () => {
         <span className="font-mono text-[10px] text-accent tracking-[0.22em]">4 PILARES DA FORMAÇÃO</span>
         <span className="font-mono text-[10px] text-dim tracking-[0.22em] hidden md:inline">IMERSÃO → IA → REDE → CFP®</span>
       </div>
-      <div data-reveal-group className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         {pillars.map((p, i) =>
         <div key={i} className={
-        "p-5 lg:p-6 flex flex-col gap-3 lift " + (
+        "p-5 lg:p-6 flex flex-col gap-3 " + (
         p.highlight ? "bg-[color:var(--accent-soft)] " : "") + (
         i < pillars.length - 1 ? "lg:border-r border-line " : "") + (
         i < pillars.length - 1 ? "border-b lg:border-b-0 border-line" : "")
@@ -425,31 +480,24 @@ const Hero = () =>
 <section className="relative border-b border-line">
     <div className="absolute inset-0 grid-bg opacity-40 pointer-events-none" />
     <div className="max-w-[1280px] mx-auto px-6 lg:px-10 pt-12 lg:pt-20 pb-14 lg:pb-20 relative">
-      {/* meta strip */}
-      <div className="flex flex-wrap items-center gap-3 mb-8">
-        <Tag tone="accent">PRÉ LANÇAMENTO EXCLUSIVO DO B2B EXPERIENCE</Tag>
-        <Tag>Vagas limitadas · Inscrições abrem em maio</Tag>
-        <span className="hidden md:inline font-mono text-[10px] text-dim ticker">REF · LP/IAP/V1</span>
-      </div>
+      {/* meta strip removed */}
 
       <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-        <div data-reveal className="lg:col-span-7">
-          <h1 className="font-serif text-[40px] sm:text-6xl lg:text-[80px] leading-[1.02] sm:leading-[0.98] tracking-[-0.02em]">
-            Formação de assessores de  <span className="italic text-accent">alta performance</span><br />
-
+        <div className="lg:col-span-7">
+          <h1 className="font-serif text-[44px] sm:text-6xl lg:text-[80px] leading-[1.0] tracking-[-0.02em]">
+            <span className="block">Formação</span>
+            <span className="block italic text-accent">Assessor do Futuro</span>
           </h1>
-          <p className="mt-7 text-[15px] sm:text-[16px] lg:text-[17px] text-muted max-w-2xl leading-relaxed">
-            Profissionais mais qualificados mapeiam <span className="text-white font-medium">6× mais oportunidades</span> e convertem <span className="text-white font-medium">4,5× mais</span>. Mais duration. Mais satisfação dos clientes. A XP está elevando o nível de qualidade dos profissionais no mercado — e esta é a <span className="text-white font-medium">porta de entrada</span> para a trilha.
+          <p className="mt-7 text-[16px] lg:text-[17px] text-muted max-w-2xl leading-relaxed">
+            Os números ao lado vêm de um <span className="text-white font-medium">resultados do XP Academy</span>: o método multiplica a performance dos assessores em cada etapa do funil — evidência da eficácia que a Formação Assessor do Futuro agora leva a toda a rede.
           </p>
-          <div className="mt-8 flex flex-wrap items-center gap-4">
-            <CTAButton variant="primary" size="lg">Tenho interesse</CTAButton>
-            <a href="#resultados" className="text-sm text-muted hover:text-white inline-flex items-center gap-2 group">
-              Ver a tese em números <Icon name="arrow-down" className="w-4 h-4 transition-transform group-hover:translate-y-0.5" />
+          <div className="mt-8">
+            <a href="#resultados" className="text-sm text-muted hover:text-white inline-flex items-center gap-2">
+              Ver a tese em números <Icon name="arrow-down" className="w-4 h-4" />
             </a>
           </div>
-          <HeroSeals />
         </div>
-        <div data-reveal className="lg:col-span-5">
+        <div className="lg:col-span-5">
           <HeroVisual />
         </div>
       </div>
@@ -492,10 +540,10 @@ const CaptureFunnel = () =>
       </h3>
     </div>
     {/* rows */}
-    <div data-reveal-group className="px-6 lg:px-10">
+    <div className="px-6 lg:px-10">
       <FunnelRow n="01" name="Mapeamento de oportunidades" mult="6×" pilotoW={100} controlW={17} />
       <FunnelRow n="02" name="Conversão em clientes" mult="4.5×" pilotoW={66} controlW={15} />
-      <FunnelRow n="03" name="AuC médio por cliente" mult="[X]×" pilotoW={36} controlW={14} placeholder />
+      <FunnelRow n="03" name="Captação" mult="+36%" pilotoW={56} controlW={41} />
     </div>
     {/* legend + source */}
     <div className="px-6 lg:px-10 py-4 border-t border-line flex flex-col md:flex-row md:items-center md:justify-between gap-2">
@@ -504,7 +552,7 @@ const CaptureFunnel = () =>
         <span className="flex items-center gap-2 text-accent"><span className="w-4 h-1.5 bg-accent" /> Grupo piloto</span>
       </div>
       <div className="font-mono text-[10px] text-dim tracking-[0.18em] uppercase">
-        Fonte: programa piloto interno. AuC médio · valor preliminar.
+        Fonte: programa piloto conduzido pelo XP Academy.
       </div>
     </div>
   </div>;
@@ -544,9 +592,9 @@ const Section02 = () =>
 /* ==================== SECTION 03 — DIFERENCIAIS ==================== */
 const Section03 = () => {
   const items = [
-  { ic: "target", n: "01", t: "Técnica de prospecção apurada", s: "Mapeamento sistemático de oportunidades, não dependência de sorte ou indicação." },
-  { ic: "banknote", n: "02", t: "Capacidade de fechar grandes contas", s: "Cliente de alto patrimônio compra plano antes de produto. Repertório técnico destrava o ticket." },
-  { ic: "heart-handshake", n: "03", t: "Relacionamento que retém", s: "Mais duration. Mais satisfação. Carteira que cresce em vez de girar." },
+  { ic: "target", n: "01", t: "Técnica de prospecção apurada", s: "Maior capacidade de mapeamento estratégico de oportunidades, com método forte e estabelecido para captação." },
+  { ic: "banknote", n: "02", t: "Capacidade de fechar grandes contas", s: "Cliente de alto patrimônio compra um planejamento financeiro completo antes do produto. Ter mais repertório técnico destrava o ticket." },
+  { ic: "heart-handshake", n: "03", t: "Relacionamento que retém", s: "Melhor qualidade significa clientes mais fiéis, com maior LTV. Sua carteira cresce com consistência." },
   { ic: "flame", n: "04", t: "Mentalidade de top performer", s: "Disciplina, rotina e processo dos profissionais que estão entre os melhores da rede.", highlight: true }];
 
   return (
@@ -559,34 +607,18 @@ const Section03 = () => {
           <span className="font-mono text-[11px] text-muted uppercase tracking-[0.22em]">Diferenciais</span>
         </div>
 
-        {/* Alta Performance lockup + title */}
-        <div data-reveal className="grid lg:grid-cols-12 gap-6 lg:gap-10 items-center mb-8 lg:mb-10">
-          <div className="lg:col-span-4">
-            <div className="border border-accent bg-[color:var(--accent-soft)] px-5 py-4 lg:px-6 lg:py-5 relative">
-              <span className="absolute top-2 left-3 font-mono text-[9px] text-accent tracking-[0.22em]">PRÁTICA DE ALTA PERFORMANCE</span>
-              <div className="flex items-baseline gap-3 mt-5">
-                <span className="font-serif text-[64px] lg:text-[92px] leading-[0.82] text-accent tracking-[-0.04em]">6×</span>
-                <span className="font-serif text-[36px] lg:text-[48px] text-dim leading-none">·</span>
-                <span className="font-serif text-[64px] lg:text-[92px] leading-[0.82] text-accent tracking-[-0.04em]">4,5×</span>
-              </div>
-              <div className="mt-3 pt-3 border-t border-[color:var(--accent-line)] font-mono text-[10px] text-accent tracking-[0.18em] uppercase">Mapeamento · Conversão</div>
-              <div className="mt-1.5 text-[12px] text-white/90 leading-snug">Multiplicadores medidos no programa piloto.</div>
-            </div>
-          </div>
-          <div className="lg:col-span-8">
-            <h2 className="font-serif text-4xl md:text-5xl lg:text-[52px] leading-[1.02] tracking-[-0.01em]">
-              O que um <span className="italic text-accent">assessor de alta performance</span> entrega ao escritório.
-            </h2>
-            <p className="mt-4 text-muted text-[14px] leading-relaxed max-w-xl">
-              Quatro atributos que separam o profissional que vai longe dos demais. O CFP® é o ponto onde tudo se consolida.
-            </p>
-          </div>
+        {/* title — lockup removed */}
+        <div className="mb-8 lg:mb-10">
+          <h2 className="font-serif text-4xl md:text-5xl lg:text-[52px] leading-[1.02] tracking-[-0.01em] max-w-4xl">
+            O que um <span className="italic text-accent">assessor de alta performance</span> entrega ao escritório.
+          </h2>
+          
         </div>
 
         {/* 4 differentiators — 2x2 grid */}
-        <div data-reveal-group className="grid grid-cols-1 md:grid-cols-2 gap-px bg-[var(--line)] border border-line">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-[var(--line)] border border-line">
           {items.map((it, i) =>
-          <div key={i} className={"p-6 lg:p-7 group relative lift " + (it.highlight ? "bg-[color:var(--accent-soft)]" : "bg-[var(--bg-2)]")}>
+          <div key={i} className={"p-6 lg:p-7 group relative " + (it.highlight ? "bg-[color:var(--accent-soft)]" : "bg-[var(--bg-2)]")}>
               <div className="flex items-center justify-between mb-4">
                 <span className="font-serif text-[40px] lg:text-[44px] text-accent leading-none tracking-[-0.02em]">{it.n}</span>
                 <Icon name={it.ic} className="w-5 h-5 text-accent" />
@@ -610,11 +642,16 @@ const Section03 = () => {
 };
 
 /* ==================== SECTION 04 — JORNADA ==================== */
-const PhaseCard = ({ idx, period, title, lead, items, accent }) =>
-<div className={"border border-line bg-surface p-6 lg:p-7 relative lift " + (accent ? "lg:-mt-6" : "")}>
+const PhaseCard = ({ idx, period, title, lead, items, accent, aspirational }) =>
+<div className={"border border-line bg-surface p-6 lg:p-7 relative h-full " + (accent ? "border-accent bg-[color:var(--accent-soft)]" : "")} style={{ backgroundColor: "rgb(24, 24, 24)" }}>
     <div className="flex items-center justify-between mb-3">
-      <span className="font-mono text-[11px] text-accent tracking-[0.22em]">FASE {idx}</span>
-      <span className="font-mono text-[11px] text-muted tracking-[0.18em]">{period}</span>
+      <span className="font-mono text-[11px] text-accent tracking-[0.22em]">NÍVEL {idx}</span>
+      {aspirational &&
+    <span className="font-mono text-[10px] text-accent tracking-[0.22em] uppercase inline-flex items-center gap-2">
+          <span className="w-1.5 h-1.5 bg-accent rotate-45" />
+          Desejável
+        </span>
+    }
     </div>
     <h3 className="font-serif text-[26px] lg:text-[30px] leading-tight">{title}</h3>
     <p className="text-[13px] text-muted mt-2 leading-relaxed">{lead}</p>
@@ -638,9 +675,9 @@ const TimelineRail = () =>
     <div className="h-px bg-line-strong" style={{ background: "var(--line-strong)" }} />
     <div className="grid grid-cols-3 -mt-2">
       {[
-    { t: "MAI – JUL", l: "Imersão + Prática" },
-    { t: "JUL", l: "Conexão com a Rede" },
-    { t: "AGO+", l: "O salto: CFP® + Comunidade" }].
+    { t: "NÍVEL 01", l: "Conexão com a Rede" },
+    { t: "NÍVEL 02", l: "Imersão e Prática" },
+    { t: "NÍVEL 03", l: "CFP e Comunidade Alumni" }].
     map((m, i) =>
     <div key={i} className="flex flex-col items-start">
           <div className="w-3 h-3 bg-accent rotate-45" />
@@ -658,13 +695,22 @@ const Section04 = () =>
       <SectionHead
       index={4}
       kicker="A jornada"
-      title={<>Formação <span className="italic">completa</span> em três fases.</>}
-      sub="Pensada para entregar repertório, prática e — quando você estiver pronto — a certificação que coroa a trilha." />
+      title={<span className="lg:whitespace-nowrap">Formação completa <span className="italic text-accent">em três níveis</span>.</span>}
+      sub="Pensada para entregar repertório, prática e a certificação que coroa a carreira." />
     
-      <TimelineRail />
-      <div data-reveal-group className="grid lg:grid-cols-3 gap-5">
+      <div className="grid lg:grid-cols-3 gap-5 items-stretch">
         <PhaseCard
-        idx="01" period="MAI – JUL"
+        idx="01"
+        title="Conexão com a Rede"
+        lead="Os dois eventos exclusivos do calendário XP. Onde você se conecta com os melhores da rede."
+        items={[
+        { t: "Advisor Experience", s: "Encontro dos melhores assessores e consultores da rede." },
+        { t: "ExpertXP", s: "Acesso à maior feira de investimentos do mundo." },
+        { t: "Networking estratégico", s: "Mesa redonda entre pares e líderes da assessoria." }]
+        } />
+        <PhaseCard
+        accent
+        idx="02"
         title="Imersão e Prática"
         lead="Três dias intensivos em São Paulo + conteúdo online de apoio + ferramenta de IA para prática contínua."
         items={[
@@ -673,19 +719,10 @@ const Section04 = () =>
         { t: "IA para simulações, pitch e objeções", s: "Prática contínua na rotina, com feedback técnico imediato." }]
         } />
         <PhaseCard
-        accent
-        idx="02" period="JUL"
-        title="Conexão com a Rede"
-        lead="Os dois eventos exclusivos do calendário XP. Onde você se conecta com os melhores da rede."
-        items={[
-        { t: "Advisor Experience", s: "Um dia na semana da ExpertXP — encontro dos melhores assessores e consultores." },
-        { t: "ExpertXP", s: "Acesso à maior feira de investimentos do mundo." },
-        { t: "Networking estratégico", s: "Mesa redonda entre pares e líderes da assessoria." }]
-        } />
-        <PhaseCard
-        idx="03" period="A PARTIR DE AGO"
-        title="A Certificação e a Comunidade"
-        lead="O salto. Consultora Educacional dedicada, certificação CFP® e acesso à comunidade dos planejadores de alta performance — vitalício."
+        aspirational
+        idx="03"
+        title="CFP e Comunidade Alumni"
+        lead="Para quem decide ir até o fim. Consultora Educacional dedicada, certificação CFP® e acesso à comunidade dos planejadores de alta performance — vitalício."
         items={[
         { t: "CFP® com Consultora Educacional XP", s: "Plano individual sob medida, do diagnóstico à prova." },
         { t: "Comunidade exclusiva (pós-aprovação)", s: "Acesso permanente à rede dos planejadores de referência." },
@@ -808,10 +845,10 @@ const Section06 = () => {
 
         {/* Days flow */}
         <div className="mt-10 lg:mt-12 relative">
-          <div data-reveal-group className="flex flex-col lg:flex-row gap-4 lg:gap-8">
+          <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
             {days.map((d, i) =>
             <div key={i} className="flex-1 relative">
-                <div className={"border bg-surface p-6 lg:p-7 h-full lift " + (d.accent ? "border-accent bg-[color:var(--accent-soft)]" : "border-line")}>
+                <div className={"border bg-surface p-6 lg:p-7 h-full " + (d.accent ? "border-accent bg-[color:var(--accent-soft)]" : "border-line")}>
                   <div className="flex items-center justify-between mb-4">
                     <span className="font-mono text-[11px] text-accent tracking-[0.22em]">DIA {d.n}</span>
                     <Icon name={d.ic} className="w-5 h-5 text-accent" />
@@ -839,7 +876,7 @@ const Section06 = () => {
           </div>
 
           {/* IA enabler bar */}
-          <div data-reveal className="mt-10 lg:mt-12 border border-accent bg-[color:var(--accent-soft)] relative">
+          <div className="mt-10 lg:mt-12 border border-accent bg-[color:var(--accent-soft)] relative">
             {/* upward chevrons connecting to each day */}
             <div className="hidden lg:grid absolute -top-2 left-0 right-0 grid-cols-3 pointer-events-none">
               {days.map((_, i) =>
@@ -896,21 +933,21 @@ const Interlude = () =>
       </div>
 
       {/* Recap: 3 compact pills of what Part I covered */}
-      <div data-reveal-group className="grid grid-cols-1 md:grid-cols-3 gap-3 max-w-3xl mb-16 lg:mb-20">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 max-w-3xl mb-16 lg:mb-20">
         {[
-          { ic: "users-round", t: "3 dias presenciais em SP" },
-          { ic: "cpu",         t: "IA contínua para prática" },
-          { ic: "calendar-heart", t: "Advisor Experience + ExpertXP" },
-        ].map((p, i) =>
-          <div key={i} className="flex items-center gap-3 border border-line px-3 py-2.5 lift">
+      { ic: "users-round", t: "3 dias presenciais em SP" },
+      { ic: "cpu", t: "IA contínua para prática" },
+      { ic: "calendar-heart", t: "Advisor Experience + ExpertXP" }].
+      map((p, i) =>
+      <div key={i} className="flex items-center gap-3 border border-line px-3 py-2.5">
             <Icon name={p.ic} className="w-4 h-4 text-muted" />
             <span className="text-[12.5px] text-muted leading-snug">{p.t}</span>
           </div>
-        )}
+      )}
       </div>
 
       {/* Page-turn — big serif statement */}
-      <div data-reveal className="grid lg:grid-cols-12 gap-10 items-end">
+      <div className="grid lg:grid-cols-12 gap-10 items-end">
         <div className="lg:col-span-3 hidden lg:block">
           {/* Decorative big "II" */}
           <div className="font-serif text-[260px] text-accent leading-[0.78] tracking-[-0.05em]">II</div>
@@ -1009,7 +1046,7 @@ const Section07 = () => {
         </div>
 
         {/* Block 1 — CFP lockup + destino natural */}
-        <div data-reveal className="grid lg:grid-cols-12 gap-6 lg:gap-10 items-center mb-12 lg:mb-14">
+        <div className="grid lg:grid-cols-12 gap-6 lg:gap-10 items-center mb-12 lg:mb-14">
           <div className="lg:col-span-5">
             <div className="border border-accent bg-[color:var(--accent-soft)] px-5 py-4 lg:px-6 lg:py-5 relative">
               <span className="absolute top-2 left-3 font-mono text-[9px] text-accent tracking-[0.22em]">CERTIFICAÇÃO</span>
@@ -1018,43 +1055,21 @@ const Section07 = () => {
                 <span className="font-serif text-[30px] lg:text-[40px] text-accent leading-none">®</span>
               </div>
               <div className="mt-3 pt-3 border-t border-[color:var(--accent-line)] font-mono text-[10px] text-accent tracking-[0.18em] uppercase">Certified Financial Planner</div>
-              <div className="mt-1.5 text-[12px] text-white/90 leading-snug">Reconhecida pela <span className="text-accent">Planejar</span> — padrão internacional do planejamento financeiro.</div>
+              <div className="mt-1.5 text-[12px] text-white/90 leading-snug">Em parceria com a  <span className="text-accent">Planejar</span> </div>
             </div>
           </div>
           <div className="lg:col-span-7">
             <h2 className="font-serif text-4xl md:text-5xl lg:text-[56px] leading-[1.02] tracking-[-0.01em]">
-              O <span className="italic text-accent">destino natural</span> da sua trilha de alta performance.
+              O <span className="italic text-accent">ponto de inflexão</span> da carreira do assessor.
             </h2>
             <p className="mt-5 text-muted text-[15px] leading-relaxed max-w-xl">
-              O CFP® é o ponto de inflexão da carreira. Reconhecimento institucional, repertório técnico completo e a chave para a comunidade dos melhores da rede. <span className="text-white">Quando você estiver pronto para o salto, a XP entra com você.</span>
+              Reconhecimento institucional, repertório técnico completo e a chave para a comunidade dos melhores da rede.
             </p>
           </div>
         </div>
 
-        {/* Block 2 — 3 CFP differentiators */}
-        <div data-reveal-group className="grid grid-cols-1 md:grid-cols-3 gap-px bg-[var(--line)] border border-line mb-12 lg:mb-14">
-          {cfpItems.map((it, i) =>
-          <div key={i} className="bg-[var(--bg-2)] p-6 lg:p-7 group relative lift">
-              <div className="flex items-center justify-between mb-4">
-                <span className="font-serif text-[40px] lg:text-[44px] text-accent leading-none tracking-[-0.02em]">{it.n}</span>
-                <Icon name={it.ic} className="w-5 h-5 text-accent" />
-              </div>
-              <h3 className="font-serif text-xl lg:text-[22px] leading-snug">{it.t}</h3>
-              <p className="mt-2.5 text-[13px] text-muted leading-relaxed">{it.s}</p>
-              <div className="ribbed mt-5 group-hover:bg-accent" />
-            </div>
-          )}
-        </div>
-
         {/* Block 3 — Preparatório CFP®: trilha individual + Consultora enabler */}
-        <div data-reveal className="mb-12 lg:mb-14">
-          <div className="flex items-center gap-3 mb-6">
-            <span className="font-mono text-[11px] text-accent tracking-[0.22em]">O PREPARATÓRIO</span>
-            <span className="ribbed flex-1" />
-          </div>
-          <h3 className="font-serif text-3xl md:text-4xl lg:text-[44px] leading-tight max-w-3xl mb-2">
-            Uma trilha individual para chegar até a <span className="italic text-accent">prova</span> sem cair a produtividade.
-          </h3>
+        <div className="mb-12 lg:mb-14">
           <p className="text-muted text-[14px] leading-relaxed max-w-2xl mb-10">
             Plano construído sob medida com a Consultora Educacional XP — do diagnóstico à prova. Encaixa nos horários do aluno e protege a produtividade do escritório por desenho.
           </p>
@@ -1072,7 +1087,7 @@ const Section07 = () => {
             </div>
 
             {/* Steps */}
-            <div data-reveal-group className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-0 lg:pt-12 relative">
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-0 lg:pt-12 relative">
               {trailSteps.map((st, i) =>
               <div key={i} className={"flex flex-col px-0 lg:px-5 " + (i < trailSteps.length - 1 ? "lg:border-r border-line" : "")}>
                   <div className="font-mono text-[11px] text-accent tracking-[0.22em] mb-3">ETAPA {st.n}</div>
@@ -1122,66 +1137,6 @@ const Section07 = () => {
           </div>
         </div>
 
-        {/* Block 4 — Comunidade */}
-        <div data-reveal id="comunidade">
-          <div className="flex items-center gap-3 mb-6">
-            <span className="font-mono text-[11px] text-accent tracking-[0.22em]">A COMUNIDADE VITALÍCIA</span>
-            <span className="ribbed flex-1" />
-          </div>
-          <h3 className="font-serif text-3xl md:text-4xl lg:text-[44px] leading-tight max-w-3xl mb-10">
-            O que está <span className="italic text-accent">reservado</span>  para os membros da comunidade de alumni
-          </h3>
-          <div className="grid lg:grid-cols-12 gap-10 items-start">
-            <div className="lg:col-span-4">
-              <NetworkVisual />
-            </div>
-            <div className="lg:col-span-4">
-              <div className="font-mono text-[11px] text-accent tracking-[0.22em] mb-4">QUEM ENTRA</div>
-              <ul className="grid grid-cols-1 gap-3">
-                {[
-                { ic: "check-circle-2", t: "Aprovação no CFP®" },
-                { ic: "sparkles", t: "Top da turma em desempenho na formação" },
-                { ic: "link", t: "Vínculo ativo com escritório credenciado XP" },
-                { ic: "bar-chart-3", t: "Métricas de captação e duration consistentes" }].
-                map((c, i) =>
-                <li key={i} className="flex items-center gap-3 border border-line bg-surface px-3 py-2.5">
-                    <Icon name={c.ic} className="w-4 h-4 text-accent" />
-                    <span className="text-[13px]">{c.t}</span>
-                  </li>
-                )}
-              </ul>
-            </div>
-            <div className="lg:col-span-4">
-              <div className="font-mono text-[11px] text-accent tracking-[0.22em] mb-4">O QUE ESTÁ RESERVADO</div>
-              <ul className="space-y-3">
-                {[
-                { t: "Encontros trimestrais presenciais", s: "+ meetups online entre as edições. Cadência fixa, pauta exclusiva." },
-                { t: "Estudos de caso de top performers", s: "Como crescem carteira, captam e retêm — com números reais." },
-                { t: "Acesso direto a sócios e líderes XP", s: "Rodadas fechadas com a liderança da rede." },
-                { t: "Convite prioritário a iniciativas XP", s: "Prévia de produtos, programas e oportunidades estratégicas." }].
-                map((it, i) =>
-                <li key={i} className="border border-line bg-surface p-3">
-                    <div className="flex items-start gap-3">
-                      <div className="font-mono text-[10px] text-accent tracking-[0.22em] pt-0.5">0{i + 1}</div>
-                      <div>
-                        <div className="text-[13px] font-medium">{it.t}</div>
-                        <div className="text-[12px] text-muted mt-0.5">{it.s}</div>
-                      </div>
-                    </div>
-                  </li>
-                )}
-              </ul>
-            </div>
-          </div>
-
-          {/* Closing scarcity line */}
-          <div className="mt-10 border border-accent bg-[color:var(--accent-soft)] p-6 lg:p-7 flex items-center gap-4">
-            <Icon name="lock" className="w-6 h-6 text-accent shrink-0" />
-            <div className="font-serif text-[20px] lg:text-[26px] leading-snug">
-              <span className="text-accent">O CFP® habilita o acesso a comunidade.</span>  A certificação é o gatilho que separa quem chega à elite do planejamento financeiro.
-            </div>
-          </div>
-        </div>
       </div>
     </section>);
 
@@ -1190,93 +1145,48 @@ const Section07 = () => {
 
 /* ==================== SECTION 08 — CRONOGRAMA ==================== */
 const Section08 = () => {
-  const bullets = [
-    "Mapeamento sistemático de oportunidades",
-    "Reconhecimento institucional e repertório técnico",
-    "Acesso à maior feira de investimentos do mundo",
-    "Plano de ação individual para os próximos 90 dias"];
+  const stops = [
+  { tag: "FINAL DE MAIO", t: "Abertura de inscrições", s: "Sócios de escritórios credenciados têm prioridade.", ic: "key-round" },
+  { tag: "MAI – JUL", t: "Fase 1+2 · Imersão · IA · Eventos", s: "Três dias em SP + IA contínua + Advisor Experience e ExpertXP.", ic: "flag" },
+  { tag: "A PARTIR DE AGO", t: "Fase 3 · CFP® com Consultoria Educacional XP", s: "O salto. Consultora dedicada do diagnóstico à prova.", ic: "award" }];
 
   return (
-    <section className="border-b border-line bg-[var(--bg)]">
+    <section className="border-b border-line">
       <div className="max-w-[1280px] mx-auto px-6 lg:px-10 py-16 lg:py-24">
-        {/* kicker */}
-        <div className="flex items-center gap-3 mb-10 lg:mb-14">
-          <span className="font-mono text-[11px] text-accent tracking-[0.22em]">FORMAÇÃO COMPLETA</span>
-          <span className="ribbed flex-1 max-w-[120px]" />
-        </div>
-
-        <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-          {/* LEFT */}
-          <div data-reveal className="lg:col-span-7">
-            <h2 className="font-serif text-[34px] sm:text-5xl lg:text-[68px] leading-[1.04] sm:leading-[1.02] tracking-[-0.01em]">
-              Dê o próximo <span className="italic">passo</span> na sua carreira.
-            </h2>
-
-            <p className="mt-6 lg:mt-10 text-[14.5px] sm:text-[15px] lg:text-[16px] text-muted leading-relaxed max-w-xl">
-              Profissionais mais qualificados mapeiam <span className="text-white font-medium">6× mais oportunidades</span> e convertem <span className="text-white font-medium">4,5× mais</span>. O CFP® é o ponto de inflexão da carreira.
-            </p>
-
-            <ul data-reveal-group className="mt-7 space-y-3.5 max-w-xl">
-              {bullets.map((b, i) =>
-              <li key={i} className="flex items-start gap-3 text-[14px] sm:text-[14.5px] leading-snug">
-                  <span className="mt-2 w-1.5 h-1.5 bg-accent rounded-full shrink-0" />
-                  <span>{b}</span>
-                </li>
-              )}
-            </ul>
-
-            <div className="mt-9 lg:mt-10">
-              <CTAButton variant="primary" size="lg" onClick={openACForm}>Reservar agora</CTAButton>
-            </div>
-          </div>
-
-          {/* RIGHT — CFP visual + stat cards */}
-          <div data-reveal className="lg:col-span-5 relative h-[400px] sm:h-[480px] lg:h-[560px] mt-4 lg:mt-0">
-            {/* stat card · top right */}
-            <div className="absolute top-0 right-0 z-20 border border-line bg-[var(--surface)] rounded-md px-4 py-3 sm:px-5 sm:py-4 w-[150px] sm:w-[180px] float-soft">
-              <div className="font-serif text-[32px] sm:text-[40px] leading-none text-accent tracking-[-0.02em]">6×</div>
-              <div className="mt-1.5 sm:mt-2 font-mono text-[9px] sm:text-[10px] text-muted tracking-[0.22em] uppercase">Mais oportunidades</div>
-            </div>
-
-            {/* CFP circle with rings */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <svg viewBox="0 0 420 420" className="w-full h-full max-w-[420px] lg:max-w-[460px]">
-                <g fill="none" stroke="var(--accent)">
-                  <circle className="cfp-ring-a" cx="210" cy="210" r="200" strokeWidth="0.8" strokeOpacity="0.35" />
-                  <circle className="cfp-ring-b" cx="210" cy="210" r="160" strokeWidth="0.8" strokeOpacity="0.35" />
-                  <circle className="cfp-ring-c" cx="210" cy="210" r="120" strokeWidth="0.8" strokeOpacity="0.35" />
-                </g>
-                <circle cx="210" cy="210" r="92" fill="#F5C518" />
-                <text
-                  x="210" y="232"
-                  textAnchor="middle"
-                  fontFamily="Instrument Serif, ui-serif, Georgia, serif"
-                  fontSize="84"
-                  fill="#0A0A0F"
-                  letterSpacing="-2">CFP</text>
-                <g transform="translate(294,168)" stroke="#0A0A0F" strokeWidth="1.2" fill="none">
-                  <circle cx="7" cy="7" r="7" />
-                  <text x="7" y="10.5" fontFamily="Instrument Serif, serif" fontSize="9" fill="#0A0A0F" stroke="none" textAnchor="middle">R</text>
-                </g>
-              </svg>
-            </div>
-
-            {/* stat card · bottom */}
-            <div className="absolute bottom-0 left-2 sm:left-1/2 sm:-translate-x-[55%] z-20 border border-line bg-[var(--surface)] rounded-md px-4 py-3 sm:px-5 sm:py-4 w-[150px] sm:w-[180px] float-soft delay">
-              <div className="font-serif text-[32px] sm:text-[40px] leading-none text-accent tracking-[-0.02em]">4,5×</div>
-              <div className="mt-1.5 sm:mt-2 font-mono text-[9px] sm:text-[10px] text-muted tracking-[0.22em] uppercase">Mais conversão</div>
-            </div>
-          </div>
-        </div>
-
-        {/* bottom: selos institucionais */}
-        <div className="mt-14 lg:mt-20 pt-6 border-t border-line flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <span className="font-mono text-[11px] text-muted tracking-[0.22em] uppercase">Selos institucionais</span>
-          <div className="flex flex-wrap items-center gap-2">
-            {["CFP®", "Planejar", "XP"].map((s) =>
-            <span key={s} className="tag-pill border border-line text-muted text-[12px] px-4 py-2 rounded-md">{s}</span>
+        <SectionHead
+          index={8}
+          kicker="Cronograma"
+          title={<>Próximos <span className="italic">passos</span>.</>} />
+        
+        {/* horizontal timeline */}
+        <div className="relative">
+          <div className="absolute left-0 right-0 top-[34px] h-px bg-line-strong" style={{ background: "var(--line-strong)" }} />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {stops.map((s, i) =>
+            <div key={i} className="relative">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-3 h-3 bg-accent rotate-45 relative z-10" />
+                  <div className="font-mono text-[11px] text-accent tracking-[0.22em]">{s.tag}</div>
+                </div>
+                <div className="border border-line bg-surface p-5">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-mono text-[11px] text-muted tracking-[0.22em]">MARCO 0{i + 1}</span>
+                    <Icon name={s.ic} className="w-4 h-4 text-accent" />
+                  </div>
+                  <div className="font-serif text-xl leading-tight">{s.t}</div>
+                  <div className="text-[12.5px] text-muted mt-2">{s.s}</div>
+                </div>
+              </div>
             )}
           </div>
+        </div>
+
+        <div className="mt-12 border border-line bg-surface p-6 lg:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+          <div className="max-w-2xl">
+            <div className="font-mono text-[11px] text-accent tracking-[0.22em] mb-2">VAGAS LIMITADAS</div>
+            <div className="font-serif text-2xl lg:text-3xl leading-tight">Sócios de escritórios credenciados têm prioridade. Manifeste seu interesse para garantir acesso na abertura das inscrições.</div>
+          </div>
+          <CTAButton size="lg" variant="primary">Tenho interesse</CTAButton>
         </div>
       </div>
     </section>);
@@ -1317,16 +1227,16 @@ const CompareTable = () => {
 const FAQItem = ({ q, n, children, defaultOpen = false }) => {
   const [open, setOpen] = useState(defaultOpen);
   return (
-    <div className="border-b border-line group/faq">
-      <button onClick={() => setOpen(!open)} className="w-full flex items-start gap-5 py-5 text-left transition-colors hover:bg-white/[0.02]">
+    <div className="border-b border-line">
+      <button onClick={() => setOpen(!open)} className="w-full flex items-start gap-5 py-5 text-left">
         <span className="font-mono text-[11px] text-accent tracking-[0.22em] pt-1 shrink-0">Q.{n}</span>
-        <span className="font-serif text-[18px] sm:text-[20px] lg:text-[22px] leading-snug flex-1 transition-colors group-hover/faq:text-accent">{q}</span>
-        <span className={"text-muted transition-transform shrink-0 duration-300 " + (open ? "rotate-45 text-accent" : "")}>
+        <span className="font-serif text-[20px] lg:text-[22px] leading-snug flex-1">{q}</span>
+        <span className={"text-muted transition-transform shrink-0 " + (open ? "rotate-45" : "")}>
           <Icon name="plus" className="w-5 h-5" />
         </span>
       </button>
       {open &&
-      <div className="pl-[42px] sm:pl-[58px] pr-2 pb-6 text-[14px] text-muted leading-relaxed animate-[fadeIn_.4s_ease]">
+      <div className="pl-[58px] pr-2 pb-6 text-[14px] text-muted leading-relaxed">
           {children}
         </div>
       }
@@ -1345,7 +1255,7 @@ const Section09 = () =>
         sub="As objeções mais comuns dos sócios — respondidas com objetividade." />
       
       </div>
-      <div data-reveal className="lg:col-span-8">
+      <div className="lg:col-span-8">
         <FAQItem n="01" q="Esta formação é para qual perfil de assessor?">
           Para assessores em qualquer estágio. Iniciantes e intermédiarios encontram aqui o ponto de entrada certo — a imersão de 3 dias, a IA de prática e os eventos da rede aceleram a curva sem exigir pré-requisito técnico. Seniores em evolução podem ir direto à Fase 3 (CFP®); para esse perfil, recomendamos a LP da Formação CFP de Alta Performance.
         </FAQItem>
@@ -1392,22 +1302,15 @@ const Section10 = () => {
     <section id="interesse" className="border-b border-line">
       <div className="max-w-[1280px] mx-auto px-6 lg:px-10 py-16 lg:py-24">
         <div className="grid lg:grid-cols-12 gap-10 items-start">
-          <div data-reveal className="lg:col-span-5">
+          <div className="lg:col-span-5">
             <SectionHead
               index={10}
               kicker="Tenho interesse"
               title={<>Acelere a <span className="italic text-accent">performance</span> dos seus assessores.</>}
               sub="Vagas limitadas. Sócios de escritórios credenciados têm prioridade. Manifeste seu interesse e receba prioridade na abertura das inscrições." />
-            
-            <div className="grid grid-cols-3 gap-3 mt-6 max-w-md">
-              {["CFP®", "Planejar", "XP"].map((s) =>
-              <div key={s} className="border border-line bg-surface aspect-[5/2] flex items-center justify-center font-mono text-[12px] tracking-[0.2em] text-muted">{s}</div>
-              )}
-            </div>
-            <div className="mt-6 font-mono text-[10px] text-dim tracking-[0.18em] uppercase">Selos institucionais · Wireframe</div>
           </div>
 
-          <div data-reveal className="lg:col-span-7">
+          <div className="lg:col-span-7">
             <form onSubmit={(e) => {e.preventDefault();setSubmitted(true);}} className="border border-line bg-surface p-6 lg:p-8">
               {submitted ?
               <div className="py-10 text-center">
@@ -1420,7 +1323,7 @@ const Section10 = () => {
 
               <>
                   <div className="flex items-center justify-between mb-5">
-                    <span className="font-mono text-[11px] text-accent tracking-[0.22em]">FORMULÁRIO · REF/IAP-2026</span>
+                    <span className="font-mono text-[11px] text-accent tracking-[0.22em]">FORMULÁRIO</span>
                     <span className="font-mono text-[11px] text-muted tracking-[0.22em]">CAMPOS OBRIGATÓRIOS *</span>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1488,14 +1391,16 @@ const Footer = () =>
 <footer className="bg-[var(--bg)]">
     <div className="max-w-[1280px] mx-auto px-6 lg:px-10 py-10 grid md:grid-cols-3 gap-6 items-start">
       <div className="flex items-center gap-3">
-        <img src="/logo-cfp.svg" alt="CFP®" className="h-6 w-auto opacity-90" />
+        <img src="assets/xp-educacao-logo.png" alt="XP Educação" className="h-7 w-auto block" />
+        <span className="w-px h-4" style={{ background: "var(--line-strong)" }} />
+        <div className="font-mono text-[11px] text-muted tracking-[0.22em] uppercase">Formação Assessor do Futuro</div>
       </div>
       <div className="text-[12px] text-muted leading-relaxed">
         Dados pilotados com alunos do programa piloto. Multiplicadores de 6× (mapeamento) e 4,5× (conversão) referem-se à comparação entre alunos do piloto e base de profissionais do mercado.
       </div>
       <div className="text-[12px] text-muted md:text-right">
         <div>CFP® é marca registrada da Planejar.</div>
-        <div className="mt-2 font-mono text-[10px] tracking-[0.22em] uppercase text-dim">© 2026 · XP Educação</div>
+        <div className="mt-2 font-mono text-[10px] tracking-[0.22em] uppercase text-dim">© 2026 · Wireframe LP · v1.0</div>
       </div>
     </div>
   </footer>;
@@ -1503,50 +1408,24 @@ const Footer = () =>
 
 /* ==================== APP ==================== */
 const App = () => {
-  useEffect(() => {
-    const prefersReduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const targets = document.querySelectorAll("[data-reveal], [data-reveal-group]");
-
-    if (prefersReduced || typeof IntersectionObserver === "undefined") {
-      targets.forEach((el) => el.classList.add("is-visible"));
-      return;
-    }
-
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) {
-          e.target.classList.add("is-visible");
-          io.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
-
-    targets.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, []);
-
   return (
     <main className="min-h-screen">
       <TopBar />
-      <Hero />
-      <Section02 />
-      <Section03 />
-      <Section04 />
-      <Section06 />
-      <Interlude />
-      <Section07 />
-      <Section08 />
-      <Section09 />
-      <Section10 />
+      <LaunchHero />
+      <TransitionBand />
+      <div id="lp-original">
+        <Hero />
+        <Section03 />
+        <Section04 />
+        <Section07 />
+        <Section10 />
+      </div>
       <Footer />
-      <ACFormModal />
     </main>);
 
 };
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
-
 </script>
-
-
-</body></html>
+</body>
+</html>
