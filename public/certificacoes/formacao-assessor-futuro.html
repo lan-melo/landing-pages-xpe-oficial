@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Formação Assessor do Futuro — Wireframe LP</title>
+<title>Formação Assessor do Futuro · XP Educação</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -76,7 +76,7 @@
     font-family:'Instrument Serif',ui-serif,Georgia,serif;
     text-transform:uppercase;
     letter-spacing:-0.025em;
-    line-height:1.0;
+    line-height:0.88;
     font-weight:400;
   }
   .launch-headline > span{ display:block; white-space:nowrap; }
@@ -182,18 +182,84 @@ const SectionHead = ({ index, kicker, title, sub, alignLeft = true }) =>
   </div>;
 
 
-const CTAButton = ({ children, variant = "primary", size = "md", className = "", icon = "arrow-right" }) => {
+const CTAButton = ({ children, variant = "primary", size = "md", className = "", icon = "arrow-right", onClick, href = "#interesse" }) => {
   const base = "inline-flex items-center gap-2 font-medium transition-colors";
   const sizes = { md: "px-5 py-3 text-sm", lg: "px-6 py-3.5 text-[15px]" };
   const variants = {
     primary: "bg-accent text-black hover:bg-yellow-300",
     ghost: "border border-line-strong text-white hover:bg-white/5"
   };
-  return (
-    <a href="#interesse" className={`${base} ${sizes[size]} ${variants[variant]} ${className}`}>
+  const inner = (
+    <>
       <span>{children}</span>
       {icon && <Icon name={icon} className="w-4 h-4" />}
+    </>);
+
+  if (onClick) {
+    return (
+      <button type="button" onClick={onClick} className={`${base} ${sizes[size]} ${variants[variant]} ${className}`}>
+        {inner}
+      </button>);
+  }
+  return (
+    <a href={href} className={`${base} ${sizes[size]} ${variants[variant]} ${className}`}>
+      {inner}
     </a>);
+
+};
+
+const openACForm = () => window.dispatchEvent(new CustomEvent("open-ac-form"));
+
+/* ==================== ACTIVE CAMPAIGN MODAL ==================== */
+const ACFormModal = () => {
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef(null);
+  const loadedRef = useRef(false);
+
+  useEffect(() => {
+    const onOpen = () => setOpen(true);
+    const onKey = (e) => {if (e.key === "Escape") setOpen(false);};
+    window.addEventListener("open-ac-form", onOpen);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("open-ac-form", onOpen);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    if (open && containerRef.current && !loadedRef.current) {
+      const formDiv = document.createElement("div");
+      formDiv.className = "_form_691";
+      containerRef.current.appendChild(formDiv);
+      const script = document.createElement("script");
+      script.src = "https://email.xpeducacao.com.br/f/embed.php?id=691";
+      script.charset = "utf-8";
+      script.async = true;
+      containerRef.current.appendChild(script);
+      loadedRef.current = true;
+    }
+  }, [open]);
+
+  return (
+    <div
+      className={"fixed inset-0 z-[100] transition-opacity " + (open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none")}
+      aria-hidden={!open}>
+      <div className="absolute inset-0 bg-black/75 backdrop-blur-sm" onClick={() => setOpen(false)} />
+      <div className="relative h-full w-full flex items-center justify-center p-4">
+        <div className="relative bg-white text-black w-full max-w-[640px] max-h-[92vh] overflow-auto shadow-2xl rounded-md">
+          <button
+            type="button"
+            onClick={() => setOpen(false)}
+            aria-label="Fechar"
+            className="absolute top-3 right-3 w-9 h-9 inline-flex items-center justify-center rounded hover:bg-black/10 z-10">
+            <Icon name="x" className="w-5 h-5" />
+          </button>
+          <div ref={containerRef} className="ac-form-container p-6 pt-12" />
+        </div>
+      </div>
+    </div>);
 
 };
 
@@ -229,7 +295,7 @@ const LaunchHero = () =>
       {/* subheadline + cta */}
       <div className="mt-12 lg:mt-16 max-w-3xl">
         <p className="text-[16px] lg:text-[18px] leading-relaxed" style={{ color: "rgba(244,244,240,0.78)" }}>
-          Nos últimos anos, formamos os melhores assessores do mercado financeiro brasileiro —  <span className="text-white font-medium">+10.000 pessoas impactadas</span>, da certificação e onboarding ao topo da rede. Agora chegou o próximo passo: unimos o método do   <span className="text-white">XP Academy</span>      à plataforma      <span className="text-white">XP Educação</span>   para formar, em escala, o assessor que o futuro vai exigir.
+          Nos últimos anos, formamos os melhores assessores do mercado financeiro brasileiro, <span className="text-white font-medium">+10.000 pessoas impactadas</span>, da certificação e onboarding ao topo da rede. Agora chegou o próximo passo: unimos o método do <span className="text-white">XP Academy</span> à plataforma <span className="text-white">XP Educação</span> para formar, em escala, o assessor que o futuro vai exigir.
         </p>
 
         <div className="mt-9">
@@ -314,7 +380,7 @@ const ProductBlock = () =>
     <ul className="relative space-y-3 mb-7">
       {[
     { n: "01", t: "Imersão e Prática", s: "3 dias presenciais em SP, conteúdo online e IA de prática contínua." },
-    { n: "02", t: "Conexão com a Rede", s: "Advisor Experience e ExpertXP — os eventos dos melhores da rede." },
+    { n: "02", t: "Conexão com a Rede", s: "Advisor Experience e ExpertXP, os eventos dos melhores da rede." },
     { n: "03", t: "Certificação CFP® + Comunidade", s: "O salto. Consultora dedicada e acesso vitalício à elite do planejamento." }].
     map((it, i) =>
     <li key={i} className="flex gap-3">
@@ -349,8 +415,8 @@ const TransitionBand = () =>
         tag="XP Academy"
         line={<>Expertise em <span className="italic">produtividade comercial</span>.</>}
         segments={[
-        { label: "Foundation", text: "Onboarding e Lab. Alta Performance — base da carreira" },
-        { label: "Performance", text: "Aceleradora Comercial e Rota Top 100 — captação no topo" },
+        { label: "Foundation", text: "Onboarding e Lab. Alta Performance, base da carreira" },
+        { label: "Performance", text: "Aceleradora Comercial e Rota Top 100, captação no topo" },
         { label: "Elite", text: "Advisor Experience, Consultor 3.0, Rumo ao Private, Executive Club" }]
         } />
       
@@ -382,7 +448,7 @@ const TopBar = () =>
 <div className="border-b border-line sticky top-0 z-40 backdrop-blur bg-[var(--bg)]/85">
     <div className="max-w-[1280px] mx-auto px-6 lg:px-10 h-14 flex items-center justify-between">
       <div className="flex items-center gap-3">
-        <img src="assets/xp-educacao-logo.png" alt="XP Educação" className="h-7 w-auto block" />
+        <img src="/certificacoes/assets/logo_xp_white.webp" alt="XP" className="h-5 w-auto block opacity-90" />
       </div>
       <nav className="hidden md:flex items-center gap-6 text-[13px] text-muted">
         <a className="hover:text-white" href="#resultados">Resultados</a>
@@ -392,7 +458,7 @@ const TopBar = () =>
         <a className="hover:text-white" href="#comunidade">Comunidade</a>
         <a className="hover:text-white" href="#faq">FAQ</a>
       </nav>
-      <CTAButton size="md" icon={null}>Tenho interesse</CTAButton>
+      <CTAButton size="md" icon={null} onClick={openACForm}>Tenho interesse</CTAButton>
     </div>
   </div>;
 
@@ -489,7 +555,7 @@ const Hero = () =>
             <span className="block italic text-accent">Assessor do Futuro</span>
           </h1>
           <p className="mt-7 text-[16px] lg:text-[17px] text-muted max-w-2xl leading-relaxed">
-            Os números ao lado vêm de um <span className="text-white font-medium">resultados do XP Academy</span>: o método multiplica a performance dos assessores em cada etapa do funil — evidência da eficácia que a Formação Assessor do Futuro agora leva a toda a rede.
+            Os números ao lado vêm de um <span className="text-white font-medium">resultados do XP Academy</span>: o método multiplica a performance dos assessores em cada etapa do funil: evidência da eficácia que a Formação Assessor do Futuro agora leva a toda a rede.
           </p>
           <div className="mt-8">
             <a href="#resultados" className="text-sm text-muted hover:text-white inline-flex items-center gap-2">
@@ -722,7 +788,7 @@ const Section04 = () =>
         aspirational
         idx="03"
         title="CFP e Comunidade Alumni"
-        lead="Para quem decide ir até o fim. Consultora Educacional dedicada, certificação CFP® e acesso à comunidade dos planejadores de alta performance — vitalício."
+        lead="Para quem decide ir até o fim. Consultora Educacional dedicada, certificação CFP® e acesso à comunidade dos planejadores de alta performance, vitalício."
         items={[
         { t: "CFP® com Consultora Educacional XP", s: "Plano individual sob medida, do diagnóstico à prova." },
         { t: "Comunidade exclusiva (pós-aprovação)", s: "Acesso permanente à rede dos planejadores de referência." },
@@ -772,7 +838,7 @@ const Section05 = () => {
           index={5}
           kicker="Professores"
           title={<>Aprenda com quem está colhendo o resultado que <span className="italic">você quer</span>.</>}
-          sub="Os melhores planejadores financeiros — entre os melhores do Brasil — ministrando o curso." />
+          sub="Os melhores planejadores financeiros, entre os melhores do Brasil, ministrando o curso." />
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {teachers.map((t, i) => <TeacherCard key={i} {...t} />)}
@@ -841,7 +907,7 @@ const Section06 = () => {
           index={6}
           kicker="A imersão"
           title={<>Três dias no escritório XP de São Paulo. <span className="italic text-accent">E uma IA que treina com você o ano todo.</span></>}
-          sub="A imersão presencial é desenhada para transformar produtividade — não apenas entregar teoria. A IA estende o aprendizado para o dia-a-dia." />
+          sub="A imersão presencial é desenhada para transformar produtividade, não apenas entregar teoria. A IA estende o aprendizado para o dia-a-dia." />
 
         {/* Days flow */}
         <div className="mt-10 lg:mt-12 relative">
@@ -960,7 +1026,7 @@ const Interlude = () =>
             Pode parar por aqui... ou seguir  <span className="italic text-accent">até o fim</span>.
           </h2>
           <p className="mt-6 text-[16px] lg:text-[18px] text-muted leading-relaxed max-w-2xl">
-            Tudo que você viu até agora é a <span className="text-white">Imersão de Alta Performance</span>, e pode ser feita sozinha. A partir daqui, descrevemos a <span className="text-accent">formação completa</span> — o caminho que recomendamos para quem quer o salto de carreira. <span className="italic"></span>
+            Tudo que você viu até agora é a <span className="text-white">Imersão de Alta Performance</span>, e pode ser feita sozinha. A partir daqui, descrevemos a <span className="text-accent">formação completa</span>: o caminho que recomendamos para quem quer o salto de carreira. <span className="italic"></span>
           </p>
           <div className="mt-8 flex items-center gap-3">
             <span className="font-mono text-[10px] text-accent tracking-[0.22em]">PRÓXIMAS SEÇÕES</span>
@@ -1026,7 +1092,7 @@ const NetworkVisual = () =>
 const Section07 = () => {
   const cfpItems = [
   { ic: "layers", n: "01", t: "Nível técnico mais aprofundado", s: "Domínio de planejamento patrimonial, sucessório, tributário e de investimentos no mesmo profissional." },
-  { ic: "award", n: "02", t: "Maior referência no mercado", s: "Posicionamento de planejador — não de vendedor de produto. Reconhecimento institucional." },
+  { ic: "award", n: "02", t: "Maior referência no mercado", s: "Posicionamento de planejador, não de vendedor de produto. Reconhecimento institucional." },
   { ic: "banknote", n: "03", t: "Mais facilidade em gestão e captação de grandes contas", s: "Cliente de alto patrimônio compra plano antes de comprar produto. CFP® destrava o ticket." }];
   const trailSteps = [
   { n: "01", ic: "messages-square", t: "Diagnóstico", s: "Aluno + Consultoria Educacional mapeiam pontos fortes e gaps em conjunto, e elaboram seu plano de estudos." },
@@ -1071,7 +1137,7 @@ const Section07 = () => {
         {/* Block 3 — Preparatório CFP®: trilha individual + Consultora enabler */}
         <div className="mb-12 lg:mb-14">
           <p className="text-muted text-[14px] leading-relaxed max-w-2xl mb-10">
-            Plano construído sob medida com a Consultora Educacional XP — do diagnóstico à prova. Encaixa nos horários do aluno e protege a produtividade do escritório por desenho.
+            Plano construído sob medida com a Consultora Educacional XP, do diagnóstico à prova. Encaixa nos horários do aluno e protege a produtividade do escritório por desenho.
           </p>
 
           <div className="relative">
@@ -1119,7 +1185,7 @@ const Section07 = () => {
                   </div>
                   <div>
                     <div className="font-mono text-[10px] text-accent tracking-[0.22em]">CONSULTORA EDUCACIONAL XP · ENABLER</div>
-                    <div className="font-serif text-[22px] lg:text-[26px] leading-tight mt-1">Presente em todas as etapas — do diagnóstico à prova.</div>
+                    <div className="font-serif text-[22px] lg:text-[26px] leading-tight mt-1">Presente em todas as etapas, do diagnóstico à prova.</div>
                   </div>
                 </div>
                 <div className="hidden lg:block" />
@@ -1131,7 +1197,7 @@ const Section07 = () => {
                 </div>
               </div>
               <div className="border-t border-[color:var(--accent-line)] px-6 lg:px-7 py-3 font-mono text-[10px] text-muted tracking-[0.18em] uppercase">
-                Não é avulso — a Consultora Educacional acompanha cada aluno que opta pelo CFP®.
+                Não é avulso: a Consultora Educacional acompanha cada aluno que opta pelo CFP®.
               </div>
             </div>
           </div>
@@ -1186,7 +1252,7 @@ const Section08 = () => {
             <div className="font-mono text-[11px] text-accent tracking-[0.22em] mb-2">VAGAS LIMITADAS</div>
             <div className="font-serif text-2xl lg:text-3xl leading-tight">Sócios de escritórios credenciados têm prioridade. Manifeste seu interesse para garantir acesso na abertura das inscrições.</div>
           </div>
-          <CTAButton size="lg" variant="primary">Tenho interesse</CTAButton>
+          <CTAButton size="lg" variant="primary" onClick={openACForm}>Tenho interesse</CTAButton>
         </div>
       </div>
     </section>);
@@ -1199,7 +1265,7 @@ const CompareTable = () => {
   { c: "Conteúdo", o: "Genérico, vendas amplas", x: "Pilares específicos de assessoria: prospecção, captação, relacionamento, mindset" },
   { c: "Professores", o: "Acadêmicos ou consultores genéricos", x: "Top performers da rede XP, vivência prática" },
   { c: "Prática", o: "Apenas teoria em sala", x: "IA para simulações, análise de pitch, treino de objeções" },
-  { c: "Networking", o: "Limitado a colegas de turma", x: "Imersão SP + Advisor Experience + ExpertXP — encontro com os melhores" },
+  { c: "Networking", o: "Limitado a colegas de turma", x: "Imersão SP + Advisor Experience + ExpertXP, encontro com os melhores" },
   { c: "Trilha de evolução", o: "Nenhuma", x: "CFP® com Consultora Educacional + Comunidade vitalícia" }];
 
   return (
@@ -1252,21 +1318,21 @@ const Section09 = () =>
         index={9}
         kicker="FAQ"
         title={<>Perguntas <span className="italic">frequentes</span>.</>}
-        sub="As objeções mais comuns dos sócios — respondidas com objetividade." />
+        sub="As objeções mais comuns dos sócios, respondidas com objetividade." />
       
       </div>
       <div className="lg:col-span-8">
         <FAQItem n="01" q="Esta formação é para qual perfil de assessor?">
-          Para assessores em qualquer estágio. Iniciantes e intermédiarios encontram aqui o ponto de entrada certo — a imersão de 3 dias, a IA de prática e os eventos da rede aceleram a curva sem exigir pré-requisito técnico. Seniores em evolução podem ir direto à Fase 3 (CFP®); para esse perfil, recomendamos a LP da Formação CFP de Alta Performance.
+          Para assessores em qualquer estágio. Iniciantes e intermédiarios encontram aqui o ponto de entrada certo: a imersão de 3 dias, a IA de prática e os eventos da rede aceleram a curva sem exigir pré-requisito técnico. Seniores em evolução podem ir direto à Fase 3 (CFP®); para esse perfil, recomendamos a LP da Formação CFP de Alta Performance.
         </FAQItem>
         <FAQItem n="02" q="Posso inscrever a mim mesmo, meus assessores, ou ambos?">
-          Sim, para os três cenários. O programa foi desenhado para sócios em carreira avançada — que também atuam como assessores — e para assessores indicados pelo escritório. No formulário de interesse, o sócio sinaliza para quem é a inscrição.
+          Sim, para os três cenários. O programa foi desenhado para sócios em carreira avançada, que também atuam como assessores, e para assessores indicados pelo escritório. No formulário de interesse, o sócio sinaliza para quem é a inscrição.
         </FAQItem>
         <FAQItem n="03" q="Como funciona o conteúdo online e a ferramenta de IA?">
-          O conteúdo online é assíncrono e fica disponível antes, durante e depois dos 3 dias presenciais. A IA permite que o assessor pratique atendimentos, peça análise dos próprios pitches e treine objeções na rotina — quantas vezes precisar, sem comprometer a produção.
+          O conteúdo online é assíncrono e fica disponível antes, durante e depois dos 3 dias presenciais. A IA permite que o assessor pratique atendimentos, peça análise dos próprios pitches e treine objeções na rotina, quantas vezes precisar, sem comprometer a produção.
         </FAQItem>
         <FAQItem n="04" q="Quem ministra a imersão de 3 dias?">
-          Profissionais com vivência prática — assessores e líderes de alta performance da rede XP, que trazem credibilidade e exemplos reais. Não professores de sala de aula.
+          Profissionais com vivência prática: assessores e líderes de alta performance da rede XP, que trazem credibilidade e exemplos reais. Não professores de sala de aula.
         </FAQItem>
         <FAQItem n="05" defaultOpen q="Por que esta formação e não um treinamento corporativo qualquer?">
           <p>Existe diferença material em cinco eixos. Em todos eles, a Imersão de Alta Performance entrega algo que um treinamento corporativo não oferece:</p>
@@ -1276,10 +1342,10 @@ const Section09 = () =>
           O CFP® é o destino natural. Não existe assessor de alta performance que não passe por ele em algum momento. A Imersão de Alta Performance é a porta de entrada da trilha; o CFP® é o salto. Quando o aluno estiver pronto, a Consultora Educacional XP dedicada acompanha o processo do diagnóstico à prova.
         </FAQItem>
         <FAQItem n="07" q="Como meus assessores entram na Comunidade exclusiva?">
-          A entrada requer aprovação no CFP®, melhor performance na turma, vínculo ativo na rede e indicadores consistentes. Sem CFP®, não há entrada — esse é o gatilho que separa quem chega à elite dos demais.
+          A entrada requer aprovação no CFP®, melhor performance na turma, vínculo ativo na rede e indicadores consistentes. Sem CFP®, não há entrada: esse é o gatilho que separa quem chega à elite dos demais.
         </FAQItem>
         <FAQItem n="08" q="Já tenho CFP®, posso ser professor?">
-          Sim. As vagas de docentes não estão fechadas — temos um processo seletivo aberto, com vagas remuneradas, para profissionais CFP® que queiram ensinar na formação. Manifeste interesse no formulário abaixo e nossa equipe entrará em contato com os próximos passos.
+          Sim. As vagas de docentes não estão fechadas: temos um processo seletivo aberto, com vagas remuneradas, para profissionais CFP® que queiram ensinar na formação. Manifeste interesse no formulário abaixo e nossa equipe entrará em contato com os próximos passos.
         </FAQItem>
       </div>
     </div>
@@ -1287,120 +1353,33 @@ const Section09 = () =>
 
 
 /* ==================== SECTION 10 — FORM ==================== */
-const RadioCard = ({ name, value, label, checked, onChange }) =>
-<label className={"radio-card border border-line p-3 cursor-pointer flex items-center gap-3 transition-colors " + (checked ? "" : "hover:bg-white/5")}>
-    <input type="radio" name={name} value={value} checked={checked} onChange={onChange} className="accent-yellow-400" />
-    <span className="text-[13px]">{label}</span>
-  </label>;
-
-
-const Section10 = () => {
-  const [target, setTarget] = useState("mim");
-  const [professorInterest, setProfessorInterest] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  return (
-    <section id="interesse" className="border-b border-line">
-      <div className="max-w-[1280px] mx-auto px-6 lg:px-10 py-16 lg:py-24">
-        <div className="grid lg:grid-cols-12 gap-10 items-start">
-          <div className="lg:col-span-5">
-            <SectionHead
-              index={10}
-              kicker="Tenho interesse"
-              title={<>Acelere a <span className="italic text-accent">performance</span> dos seus assessores.</>}
-              sub="Vagas limitadas. Sócios de escritórios credenciados têm prioridade. Manifeste seu interesse e receba prioridade na abertura das inscrições." />
-          </div>
-
-          <div className="lg:col-span-7">
-            <form onSubmit={(e) => {e.preventDefault();setSubmitted(true);}} className="border border-line bg-surface p-6 lg:p-8">
-              {submitted ?
-              <div className="py-10 text-center">
-                  <div className="w-14 h-14 mx-auto bg-accent text-black flex items-center justify-center">
-                    <Icon name="check" className="w-6 h-6" strokeWidth={2} />
-                  </div>
-                  <div className="font-serif text-3xl mt-5">Interesse registrado.</div>
-                  <p className="text-muted text-[14px] mt-3 max-w-md mx-auto">Nossa equipe entrará em contato na abertura das inscrições. Sócios credenciados são contatados primeiro.</p>
-                </div> :
-
-              <>
-                  <div className="flex items-center justify-between mb-5">
-                    <span className="font-mono text-[11px] text-accent tracking-[0.22em]">FORMULÁRIO</span>
-                    <span className="font-mono text-[11px] text-muted tracking-[0.22em]">CAMPOS OBRIGATÓRIOS *</span>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {[
-                  { l: "Nome completo*", t: "text", p: "Como você assina" },
-                  { l: "E-mail corporativo*", t: "email", p: "voce@escritorio.com.br" },
-                  { l: "Telefone*", t: "tel", p: "(00) 00000-0000" },
-                  { l: "Escritório credenciado XP*", t: "text", p: "Razão social do escritório" }].
-                  map((f, i) =>
-                  <label key={i} className="block">
-                        <span className="font-mono text-[11px] text-muted tracking-[0.18em] uppercase">{f.l}</span>
-                        <input type={f.t} placeholder={f.p} className="mt-2 w-full bg-transparent border border-line focus:border-accent outline-none px-3 py-2.5 text-[14px] placeholder:text-dim" />
-                      </label>
-                  )}
-                    <label className="block md:col-span-2">
-                      <span className="font-mono text-[11px] text-muted tracking-[0.18em] uppercase">Código de assessor XP <span className="normal-case text-dim">(opcional · usado para segmentação)</span></span>
-                      <input type="text" placeholder="A0000000" className="mt-2 w-full bg-transparent border border-line focus:border-accent outline-none px-3 py-2.5 text-[14px] font-mono placeholder:text-dim" />
-                    </label>
-                  </div>
-
-                  <div className="mt-6">
-                    <span className="font-mono text-[11px] text-muted tracking-[0.18em] uppercase">Inscrição para*</span>
-                    <div className="mt-2 grid grid-cols-1 md:grid-cols-3 gap-3">
-                      <RadioCard name="target" value="mim" label="Mim mesmo" checked={target === "mim"} onChange={() => setTarget("mim")} />
-                      <RadioCard name="target" value="assessores" label="Meus assessores" checked={target === "assessores"} onChange={() => setTarget("assessores")} />
-                      <RadioCard name="target" value="ambos" label="Ambos" checked={target === "ambos"} onChange={() => setTarget("ambos")} />
-                    </div>
-                  </div>
-
-                  {/* Professor interest toggle */}
-                  <label className={"mt-5 block border cursor-pointer transition-colors " + (professorInterest ? "border-accent bg-[color:var(--accent-soft)]" : "border-line hover:bg-white/5")}>
-                    <div className="p-4 flex items-start gap-3">
-                      <input type="checkbox" checked={professorInterest} onChange={(e) => setProfessorInterest(e.target.checked)} className="mt-1 accent-yellow-400" />
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-mono text-[10px] text-accent tracking-[0.22em]">CORPO DOCENTE</span>
-                          <span className="font-mono text-[10px] text-dim tracking-[0.18em]">VAGAS REMUNERADAS</span>
-                        </div>
-                        <div className="font-serif text-[17px] leading-tight mt-1.5">Já tenho CFP® e quero ser professor.</div>
-                        <div className="text-[12px] text-muted mt-1 leading-snug">Marque para entrar no processo seletivo de docentes. Avaliamos perfil e ajustamos próximos passos no contato.</div>
-                      </div>
-                    </div>
-                  </label>
-
-                  <label className="flex items-start gap-3 mt-6 text-[12.5px] text-muted">
-                    <input type="checkbox" defaultChecked className="mt-1 accent-yellow-400" />
-                    <span>Aceito receber comunicações sobre a formação e iniciativas relacionadas.</span>
-                  </label>
-
-                  <button type="submit" className="mt-7 w-full bg-accent text-black font-medium py-4 hover:bg-yellow-300 inline-flex items-center justify-center gap-2">
-                    Reservar   <Icon name="arrow-right" className="w-4 h-4" />
-                  </button>
-                </>
-              }
-            </form>
-          </div>
+const Section10 = () =>
+<section id="interesse" className="border-b border-line">
+    <div className="max-w-[1280px] mx-auto px-6 lg:px-10 py-16 lg:py-24">
+      <div className="max-w-3xl">
+        <SectionHead
+          index={10}
+          kicker="Tenho interesse"
+          title={<>Acelere a <span className="italic text-accent">performance</span> dos seus assessores.</>}
+          sub="Vagas limitadas. Sócios de escritórios credenciados têm prioridade. Manifeste seu interesse e receba prioridade na abertura das inscrições." />
+        <div className="mt-8">
+          <CTAButton variant="primary" size="lg" onClick={openACForm}>Tenho interesse</CTAButton>
         </div>
       </div>
-    </section>);
-
-};
+    </div>
+  </section>;
 
 /* ==================== FOOTER ==================== */
 const Footer = () =>
 <footer className="bg-[var(--bg)]">
     <div className="max-w-[1280px] mx-auto px-6 lg:px-10 py-10 grid md:grid-cols-3 gap-6 items-start">
       <div className="flex items-center gap-3">
-        <img src="assets/xp-educacao-logo.png" alt="XP Educação" className="h-7 w-auto block" />
+        <img src="/certificacoes/assets/logo_xp_white.webp" alt="XP" className="h-5 w-auto block opacity-90" />
         <span className="w-px h-4" style={{ background: "var(--line-strong)" }} />
         <div className="font-mono text-[11px] text-muted tracking-[0.22em] uppercase">Formação Assessor do Futuro</div>
       </div>
-      <div className="text-[12px] text-muted leading-relaxed">
-        Dados pilotados com alunos do programa piloto. Multiplicadores de 6× (mapeamento) e 4,5× (conversão) referem-se à comparação entre alunos do piloto e base de profissionais do mercado.
-      </div>
-      <div className="text-[12px] text-muted md:text-right">
+      <div className="text-[12px] text-muted md:text-right md:col-start-3">
         <div>CFP® é marca registrada da Planejar.</div>
-        <div className="mt-2 font-mono text-[10px] tracking-[0.22em] uppercase text-dim">© 2026 · Wireframe LP · v1.0</div>
       </div>
     </div>
   </footer>;
@@ -1421,6 +1400,7 @@ const App = () => {
         <Section10 />
       </div>
       <Footer />
+      <ACFormModal />
     </main>);
 
 };
