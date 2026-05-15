@@ -4,6 +4,8 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Formação Assessor do Futuro · XP Educação</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/certificacoes/assets/favicon-32x32.png" />
+<link rel="shortcut icon" type="image/png" href="/certificacoes/assets/favicon-32x32.png" />
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -451,14 +453,12 @@ const TopBar = () =>
         <img src="/certificacoes/assets/logo_xp_white.webp" alt="XP" className="h-5 w-auto block opacity-90" />
       </div>
       <nav className="hidden md:flex items-center gap-6 text-[13px] text-muted">
-        <a className="hover:text-white" href="#resultados">Resultados</a>
+        <a className="hover:text-white" href="#equacao">Equação</a>
+        <a className="hover:text-white" href="#diferenciais">Diferenciais</a>
         <a className="hover:text-white" href="#jornada">Jornada</a>
-        <a className="hover:text-white" href="#imersao">Imersão</a>
         <a className="hover:text-white" href="#cfp">CFP®</a>
-        <a className="hover:text-white" href="#comunidade">Comunidade</a>
-        <a className="hover:text-white" href="#faq">FAQ</a>
       </nav>
-      <CTAButton size="md" icon={null} onClick={openACForm}>Tenho interesse</CTAButton>
+      <CTAButton size="md" icon={null} href="#interesse">Tenho interesse</CTAButton>
     </div>
   </div>;
 
@@ -664,7 +664,7 @@ const Section03 = () => {
   { ic: "flame", n: "04", t: "Mentalidade de top performer", s: "Disciplina, rotina e processo dos profissionais que estão entre os melhores da rede.", highlight: true }];
 
   return (
-    <section className="border-b border-line bg-[var(--bg-2)]">
+    <section id="diferenciais" className="border-b border-line bg-[var(--bg-2)]">
       <div className="max-w-[1280px] mx-auto px-6 lg:px-10 py-10 lg:py-14">
         {/* meta strip */}
         <div className="flex items-center gap-3 mb-6">
