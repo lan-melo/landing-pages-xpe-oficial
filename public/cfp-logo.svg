@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 64" fill="none">
-  <g fill="#F4F4F0" font-family="Geist, Inter, system-ui, sans-serif" font-weight="700">
-    <text x="0" y="48" font-size="56" letter-spacing="-1">CFP</text>
-  </g>
-  <g transform="translate(180,18)" stroke="#F4F4F0" stroke-width="1.25" fill="none">
-    <circle cx="9" cy="9" r="8.5" />
-    <text x="9" y="13" font-family="Geist, Inter, system-ui, sans-serif" font-size="10" fill="#F4F4F0" stroke="none" text-anchor="middle" font-weight="500">R</text>
-  </g>
-</svg>
