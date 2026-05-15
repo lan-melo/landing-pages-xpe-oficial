@@ -155,19 +155,83 @@ const SectionHead = ({ index, kicker, title, sub, alignLeft = true }) =>
   </div>;
 
 
-const CTAButton = ({ children, variant = "primary", size = "md", className = "", icon = "arrow-right" }) => {
+const CTAButton = ({ children, variant = "primary", size = "md", className = "", icon = "arrow-right", onClick, href = "#interesse" }) => {
   const base = "inline-flex items-center gap-2 font-medium transition-colors";
   const sizes = { md: "px-5 py-3 text-sm", lg: "px-6 py-3.5 text-[15px]" };
   const variants = {
     primary: "bg-accent text-black hover:bg-yellow-300",
     ghost: "border border-line-strong text-white hover:bg-white/5"
   };
-  return (
-    <a href="#interesse" className={`${base} ${sizes[size]} ${variants[variant]} ${className}`}>
+  const inner = (
+    <>
       <span>{children}</span>
       {icon && <Icon name={icon} className="w-4 h-4" />}
-    </a>);
+    </>);
 
+  if (onClick) {
+    return (
+      <button type="button" onClick={onClick} className={`${base} ${sizes[size]} ${variants[variant]} ${className}`}>
+        {inner}
+      </button>);
+  }
+  return (
+    <a href={href} className={`${base} ${sizes[size]} ${variants[variant]} ${className}`}>
+      {inner}
+    </a>);
+};
+
+const openACForm = () => window.dispatchEvent(new CustomEvent("open-ac-form"));
+
+/* ==================== ACTIVE CAMPAIGN MODAL ==================== */
+const ACFormModal = () => {
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef(null);
+  const loadedRef = useRef(false);
+
+  useEffect(() => {
+    const onOpen = () => setOpen(true);
+    const onKey = (e) => { if (e.key === "Escape") setOpen(false); };
+    window.addEventListener("open-ac-form", onOpen);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("open-ac-form", onOpen);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    if (open && containerRef.current && !loadedRef.current) {
+      const formDiv = document.createElement("div");
+      formDiv.className = "_form_691";
+      containerRef.current.appendChild(formDiv);
+      const script = document.createElement("script");
+      script.src = "https://email.xpeducacao.com.br/f/embed.php?id=691";
+      script.charset = "utf-8";
+      script.async = true;
+      containerRef.current.appendChild(script);
+      loadedRef.current = true;
+    }
+  }, [open]);
+
+  return (
+    <div
+      className={"fixed inset-0 z-[100] transition-opacity " + (open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none")}
+      aria-hidden={!open}>
+      <div className="absolute inset-0 bg-black/75 backdrop-blur-sm" onClick={() => setOpen(false)} />
+      <div className="relative h-full w-full flex items-center justify-center p-4">
+        <div className="relative bg-white text-black w-full max-w-[640px] max-h-[92vh] overflow-auto shadow-2xl rounded-md">
+          <button
+            type="button"
+            onClick={() => setOpen(false)}
+            aria-label="Fechar"
+            className="absolute top-3 right-3 w-9 h-9 inline-flex items-center justify-center rounded hover:bg-black/10 z-10">
+            <Icon name="x" className="w-5 h-5" />
+          </button>
+          <div ref={containerRef} className="ac-form-container p-6 pt-12" />
+        </div>
+      </div>
+    </div>);
 };
 
 /* ==================== TOP BAR ==================== */
@@ -1100,7 +1164,7 @@ const Section08 = () => {
             </ul>
 
             <div className="mt-10">
-              <CTAButton variant="primary" size="lg">Reservar agora</CTAButton>
+              <CTAButton variant="primary" size="lg" onClick={openACForm}>Reservar agora</CTAButton>
             </div>
           </div>
 
@@ -1394,6 +1458,7 @@ const App = () => {
       <Section09 />
       <Section10 />
       <Footer />
+      <ACFormModal />
     </main>);
 
 };
